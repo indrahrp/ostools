@@ -1,0 +1,204 @@
+#!/usr/bin/python
+import subprocess,re,pprint,csv
+from collections import OrderedDict 
+
+
+
+def dladm_showphys(phys):
+        print "dladm show-phys .."		
+        active_link=subprocess.Popen(['dladm','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        lines=active_link.communicate()[0]
+	for line in lines.split('\n'):
+		interface_up=re.compile(r'(net[0-9]+).*up\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e)([0-9]+)')
+                result=interface_up.findall(line) 
+                for res in result:
+	    		###debug print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
+			phys.setdefault(res[0],{})
+                        phys[res[0]]['speed']=res[1]
+			phys[res[0]]['duplex']=res[2]
+			phys[res[0]]['device']=res[3]+res[4]
+
+def dladm_showphys_L(phys,physL):
+	print "dladm show-phys -L ..."
+	active_link=subprocess.Popen(['dladm','show-phys','-L'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        lines=active_link.communicate()[0]
+	lines=lines.rstrip()
+	# debug print "lines " + lines
+       	for line in lines.split('\n'):
+		var=line.split()
+		# debug print "net "+net + " line "+ var[0]
+	   	physL[var[0]]=var[2]
+
+def find_slot_info(phys,lst,result):
+        print "Finding Slot Info ..."		
+	previtem=None
+	for key,value in lst.items():
+		#value=re.sub('/SYS.*[PCIE|MB]','Slot ',value)
+		if 'EM' in value:
+                	value= re.sub('(?<=EM[0-9]{2})-[A-Za-z]{,10}','',value)
+                else:
+                        value=re.sub('.*[PCIE|MB]','Slot ',value)
+
+			#debug print key + value
+	         	
+		if value == previtem:
+			#lst[keyprevitem]=previtem + ' port 2'
+		        if keyprevitem in phys:	
+				result[keyprevitem]=previtem + ' port 2'
+		        if key in phys: 	
+				result[key]=value + ' port 1'
+                  			
+		elif key in phys:
+			result[key] = value +' port 1 or 2'
+			  	
+		#debug print key + value
+	
+		previtem=value
+		keyprevitem=key
+
+def snoop_int(intf_list,intf_result):
+        for key,values in intf_list.items(): 
+		print "Snooping LLDP packets  " + key
+	        intf_result.setdefault(key,{})	
+	        intf_result[key]['slot']=values 	
+	        if key not in skipInterfaces:	
+			active_link=subprocess.Popen(['snoop','-d',key,'-c5','-s','1500','-v',"ethertype","0x88cc"], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+       			lines=active_link.communicate()[0]
+			portfound=False 
+			switchnamefound=False
+        		for line in lines.split('\n'):
+				#print "line " + line	
+
+	       			#m = re.search('(?<=Port Description: )[\w+/[0-9]+|.+]',line ) 
+	       			m = re.search('(?<=Port Description: ).+',line ) 
+               			if m != None:
+					print "Found  " + key + ' ' +line	
+					port = re.sub('Ethernet','',m.group(0))
+			       		#print "port " + port 
+					intfresult[key]['portno']=port
+			        	portfound=True	
+
+				m = re.search('(?<=System Name: ).*',line )
+	        		if m!= None:
+					print "Found  " + key + ' ' + line	
+					switch_name= re.sub('.INT.THOMSONREUTERS.COM','',m.group(0))
+					#print "switch name " + switch_name
+				 	intfresult[key]['switchname']=switch_name
+					switchnamefound=True
+               	       		if portfound and switchnamefound:
+			         	#print "break"	
+					break		 
+	 	else:
+			print "Skipping interface " + key				
+
+def print_output(intfresult,phys,z2_detail):
+	print "\n\nGenerating Reports ...\n\n"
+	for key,value in intfresult.items():
+		match=False
+		for slot,detail in z2_detail.items():
+		       # print " intfresult slot " + value['slot'] + ' z2 detail slot ' + slot	
+			if value['slot'].lower() == slot.lower() or value['slot'].lower() == re.sub('\.','',slot.lower()):	
+				Native,AllowedVlan=GetVlanDefinition(detail['logical_net'])
+				#print "match " + key
+				
+				print("Match master and actual Slot. MASTER :; " + slot + ";" + detail['switch_name'] + ";" + detail ['switch_port'] + ';' + detail ['logical_net'] + '; native ' + Native + '; allowed vlan ' +  AllowedVlan +'; | ACTUAL :; ' + key + "; " + value['slot'] + ';' + phys[key]['speed']+ ';'+ phys[key]['duplex'] + ';' + phys[key]['device'] + ';' +  value.get('switchname','cant find switchname') + ';'+value.get('portno','cant find switch port') + '; vlanlist '+ str(value['vlan-active']).strip('[]'))
+				match=True
+		if not match:
+		        #print "not match " + key 	
+			print ("No MATCH between MASTER and  ACTUAL. ACTUAL :; " + key + ";" + value['slot'] + ';' + phys[key]['speed']+ ';'+ phys[key]['duplex'] + ';' + phys[key]['device'] + ';' +  value.get('switchname','cant find switchname') + ';'+value.get('portno','cant find switch port') + '; vlanlist '+ str(value['vlan-active']).strip('[]'))
+
+
+        print "\n\n" 
+def get_vlan_on_intf(intfresult):
+	octettovlanid=({'10.53.21':'2200','10.53.22':'2201','10.53.23':'2201','10.53.26':'2241','10.53.30':'2501','10.53.29':'2500','10.53.20':'2210','10.53.24':'2230'})
+	print "Snooping to find active vlans on all interfaces ..."
+	for key,value in intfresult.items():
+		print "snooping " + key 
+		
+		active_link=subprocess.Popen(['snoop','-rd',key,'-c100'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+       		lines=active_link.communicate()[0]
+	        vlanlist=[] 		
+		m=None
+		n=None
+        	for line in lines.split('\n'):
+			#debug print "line get_vlan_intf" + key + '   ' + line	
+	       		m = re.search('(?<=VLAN#).+',line ) 
+                        n = re.search('^\s*10.53.29|^\s*10.53.22|^\s*10.53.23|^\s*10.53.26|^\s*10.53.30|^\s*10.53.21|^\s*10.53.20|^\s*10.53.24|^s 10.53.28',line) 
+               		if m != None:
+				print "Found vlan on interface " + key + '   ' + line	
+				vlan = re.sub(': .*','',m.group(0))
+				#debug print "vlan " + vlan 
+			        if vlan not in vlanlist: 		
+					vlanlist=vlanlist + [vlan]
+			if n != None:
+				#print "line get_vlan_intf native" + key + '   ' + line	
+				#print "ngroup 0 " + n.group(0)
+			        #vlan=octetToVlanMap(n.group(0).rstrip()) 		
+		                vlan=octettovlanid[n.group(0).strip()] + '(native)' 			
+			        #print 'network native vlan id ' + vlan		 	
+			        if vlan not in vlanlist: 		
+					vlanlist=vlanlist + [vlan]
+
+	        #debug print "listtmp"
+		pp=pprint.PrettyPrinter(indent=4)
+		#debug pp.pprint(vlanlist)
+  		intfresult[key]['vlan-active']=vlanlist
+		#print('get vlan intfresult ' + key + ' ' + intfresult.get(key,'No Info').get('switchname','No info') + ' ' + intfresult[key]['portno'] + ','.join(intfresult[key]['vlan-active']))	
+
+def find_server_z2_detail(z2_detail):
+        print "\n\nFinding Server Info from Master Sheet\n\n " 	
+        active_link=subprocess.Popen(['hostname'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        hostname=active_link.communicate()[0]
+	with open('z1z2q1_detail-sept2.csv') as csvfile:
+		readCSV = csv.reader(csvfile, delimiter=',')
+    		for row in readCSV:
+			#print "row 0 "+ row[0] + " hostname " + hostname
+		        if row[0].lower().strip() == hostname.lower().strip(): 		
+       				server = row[0]
+        			slot = row[4]
+        			switch_name = row[5]
+	        		switch_port = row[7]  	
+				logical_net = row[8]
+        			print("master sheet info : server " + server + " " + " slot " + slot + " switch_name " +switch_name	 + " " + switch_port + ' logical net ' + logical_net)
+			        z2_detail.setdefault(slot,{})
+			        z2_detail[slot]['switch_name']=switch_name
+				z2_detail[slot]['switch_port']=switch_port		
+				z2_detail[slot]['logical_net']=logical_net
+
+def GetVlanDefinition(logical_net):
+	LogicalNetNativeVlan= ({'ARBI40':'901', 'ARBI10':'901','PROD':'2201','BUILD':'2230','CHASSIS':'2200','ETG':'901','EXCH':'901','EXT':'2230','EXTHYPER':'2200',
+	'FEED':'901','FEPC':'901','FUNDIST':'901','GTDL':'901','HOST':'2241','HOSTHYPER':'2200','HOSTREP':'2243','IDMZ':'2220','LOG':'901','PRODHYPER':'2200','PRODPDNHYPER':'2200',
+	'TKR':'901','TPFUN':'901','WEB':'2210','WEBHOST':'2242','WEBHYPER':'2200','PRODPDNLBTEMP':'4000','VDITERM':'2231'})
+	
+	LogicalNetAllowedVlan=({'ARBI40':'1701','ARBI10':'1703','PROD':'2201-2209',
+	'BUILD':'2200-2202,2209-2210,2230','CHASSIS':'2200-2219,2230-2239,2244-2246','ETG':'815,816','EXCH':'1501-1502,1601','EXT':'2230-2239','EXTHYPER':'2200,2230-2239',
+	'FEED':'1800','FEPC':'1801','FUNDIST':'258,13','GTDL':'1802','HOST':'2243','HOSTHYPER':'2200,2241,2243','HOSTREP':'2243','IDMZ':'2200,2220,2280,2295','IDMZHYPER':'2200,2220,2280,2295','LOG':'1804','PRODHYPER':'2200-2209',
+	'PRODPDN':'2201-2209,2244-2246','PRODPDNHYPER':'2200-2209,1244-2246','PRODWEBHYPER':'2200-2209,2210-2219','TKR':'1511-1519,1611-1619','TPFUN':'1805','WEB':'2210-2219','WEBHOST':'2242,2562','WEBHYPER':'2200,2210-219',
+	'WEB':'2210-2219','WEBHOST':'2242','WEBHYPER':'2200,2210-2219','PRODPDNLBTEMP':'4000','VDITERM':'2231'})
+	
+	return(LogicalNetNativeVlan[logical_net],LogicalNetAllowedVlan[logical_net])
+
+
+
+skipInterfaces=[]
+phys=OrderedDict()
+physL=OrderedDict()
+result=OrderedDict()
+intfresult=OrderedDict()
+z2_detail=OrderedDict()
+dladm_showphys(phys)
+dladm_showphys_L(phys,physL)
+
+##print "phys"
+##print  phys
+##print "physL"
+##print  physL
+
+find_slot_info(phys,physL,result)
+print 'Slot Info of Network Card'
+print '========================='
+print result
+snoop_int(result,intfresult)
+get_vlan_on_intf(intfresult)
+find_server_z2_detail(z2_detail)
+print_output(intfresult,phys,z2_detail)

@@ -1,0 +1,266 @@
+#!/usr/bin/python
+
+from sys import argv
+import pprint,sys, subprocess
+import getopt, sys, re, csv, time
+
+rootdir='/var/tmp/collect2/'
+
+class HostInfo(object):
+	def __init__(self,hostname,fqdn,ipaddres,network,networkrange,broadcast,vlan,vlanno,logicalnet,logicalint,os):
+		self.hostname = hostname
+		self.fqdn = fqdn
+		self.ipaddres = ipaddres
+		self.network = network
+		self.networkrange = networkrange
+		self.broadcast = broadcast
+		self.vlan = vlan
+		self.vlanno = vlanno
+		self.logicalnet = logicalnet
+		self.logicalint = logicalint
+		self.os=os
+	
+	def set_fqdn(self,fqdn):
+		self.fqdn = fqdn
+	
+	def set_IP(ipaddres):
+		self.ipaddres=ipaddres
+	
+	def set_Network(Network):
+		self.Network=Network
+		
+	def set_NetworkRange(NetworkRange):
+		self.NetworkRange=NetworkRange
+	
+	def set_Broadcast(Broadcast):
+		self.Broadcast=Broadcast
+		
+	def set_vlan(vlan):
+		self.vlan=vlan
+	
+	def set_vlan_number(vlanno):
+		self.vlanno=vlanno
+	
+	def set_logicalnet(logicalnet):
+		self.logicalnet=logicalnet
+	
+	def set_logicalint(logicalint):
+		self.logicalint=logicalint
+	
+	def printattr(self):
+		print(self.hostname + ' ' + self.fqdn + ' ' + self.ipaddres + ' ' + self.network +' '+ self.networkrange + 
+		' '+ self.broadcast + ' ' + str(self.vlan) + ' '+ str(self.vlanno) + ' '+ self.logicalnet + ' ' + str(self.logicalint) + ' ' + self.os)
+		
+	def generatehostfile(self):
+		if self.fqdn.startswith(self.hostname+'.out') or self.fqdn.startswith(self.hostname+'.hyper') or self.fqdn.startswith(self.hostname+'.web.'):
+			print(re.sub('/[0-9]+','',self.ipaddres) + "  "+ self.fqdn + ' ' + self.hostname + ' loghost')
+		else:
+			print(re.sub('/[0-9]+','',self.ipaddres) + "  "+ self.fqdn)
+			
+
+	 
+class	LogicalHost(HostInfo):
+	def __init__(self,hostname,fqdn,ipaddres,network,networkrange,broadcast,vlan,vlanno,phys_system,logicalnet,logicalint,os):
+		super(LogicalHost,self).__init__(hostname,fqdn,ipaddres,network,networkrange,broadcast,vlan,vlanno,logicalnet,logicalint,os)
+		self.phys_system=phys_system
+	
+	def printattr(self):
+		print(self.hostname + ' ' + self.fqdn + ' ' + self.ipaddres + ' ' + self.network +' '+ self.networkrange + 
+		' '+ self.broadcast + ' ' + str(self.vlan) + ' '+ str(self.vlanno) + ' '+ self.phys_system + ' ' + self.logicalnet + ' ' + str(self.logicalint) + ' ' + self.os)
+
+
+def Load_Master_Sheet (phys_detail): 
+	print('Opening Workbook ...' )
+	with open(rootdir + 'z1z2q1_allphysicalsept2.csv') as csvfile:
+		readCSV = csv.reader(csvfile, delimiter=',')
+		for row in readCSV:
+			#print "row 0 "+ row[0] + " hostname " + hostname
+	    
+			fqdn = row[0]   
+			ipaddres = row[1]
+			network	= row[2]
+			networkrange	= row[3]
+			broadcast	= row[4]
+			vlan	= row[5]
+			vlanno	= row[6]
+			logicalnet	= row[7]
+			logicalint	= row[8]
+			hostname=fqdn.split('.')[0]
+		        if  hostname in linuxos:
+				os='Linux'	
+			else:
+				os='Solaris'
+			#print('host name ' + hostname + ' fqdn ' + fqdn)
+			hostinstance=HostInfo(hostname,fqdn,ipaddres,network,networkrange,broadcast,vlan,vlanno,logicalnet,logicalint,os)
+			phys_detail.append(hostinstance)
+		
+def Load_Master_Sheet_Logical (logical_detail): 
+	print('Opening Workbook ...')
+	with open(rootdir + 'z1z2q1_logical-sept2.csv') as csvfile:
+		readCSV = csv.reader(csvfile, delimiter=',')
+		for row in readCSV:
+        #print "row 0 "+ row[0] + " hostname " + hostname
+	    
+			fqdn = row[0]   
+			ipaddres = row[1]
+			network	= row[2]
+			networkrange	= row[3]
+			broadcast	= row[4]
+			vlan	= row[5]
+			vlanno	= row[6]
+			phys_system = row[7]
+			logicalnet	= row[8]
+			logicalint	= row[9]
+			hostname=fqdn.split('.')[0]
+		        if  hostname in linuxos:
+				os='Linux'	
+			else:
+				os='Solaris'
+			#print('host name ' + hostname + ' fqdn ' + fqdn)
+			hostinstance=LogicalHost(hostname,fqdn,ipaddres,network,networkrange,broadcast,vlan,vlanno,phys_system,logicalnet,logicalint,os)
+			logical_detail.append(hostinstance)
+		
+		
+		
+def printallfqdn ( phys_detail):
+		for server in phys_detail:
+			server.printattr()
+
+def printahostinfo (phys_detail,hostname):
+		for server in phys_detail:
+			if server.hostname == hostname:
+				print ("hostname information :")
+				server.printattr()
+				
+def generatehostfile (detail,hostname):
+	for server in detail:
+		#print ("hostname information :")
+		if server.hostname == hostname:
+			server.generatehostfile()
+	print("\n10.53.22.98  ldapz1.out.z1.tdn.hzl.ilx.com ldapz1")
+	print("10.53.22.99  ldapz1.out.z2.tdn.hzl.ilx.com ldapz2")
+	##print("10.231.98.239  oracle-oem-oc-mgmt-boxerz1")
+			
+def printalllogicalfqdn ( logical_detail):
+		for server in logical_detail:
+			server.printattr()
+
+def printalogicalhostinfo (logical_detail,hostname):
+		#print("finding logical host info " + hostname)
+		for server in logical_detail:
+			#print (" server " + server.hostname)
+			if server.hostname == hostname:
+				#print ("hostname information :")
+				server.printattr()
+
+
+
+def ping_server(serverIP,broadcast,linux):
+	
+    if broadcast and linux:
+    	res = subprocess.call(['ping',serverIP,'-b','-s','40','-c','2'])
+    elif broadcast and not linux:
+    	res = subprocess.call(['ping','-s',serverIP,'50','10'])
+    else:
+    	res = subprocess.call(['ping',serverIP,' 3' ])
+    	if res == 0:
+       		print "ping to", serverIP , "OK"
+   	elif res == 2:
+		print "no response from", address
+    	else:
+        	print "ping to", serverIP, "failed!"
+				
+	
+def pingAllInt(detail,hostname):
+		for server in detail:
+			if server.hostname == hostname:
+				print ("\n\nping server " + server.fqdn)
+				#print(re.sub('/[0-9]+','',self.ipaddres)
+				ping_server(re.sub('/[0-9]+','',server.ipaddres),False,False)
+				
+				
+def pingBroadcastAllInt(detail):
+	active_link=subprocess.Popen(['hostname'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        hostname=active_link.communicate()[0].strip()
+	print "\n Ping broadcast to All attached Network of " + hostname 	
+	time.sleep(4)
+	for server in detail:
+                        if server.hostname == hostname:
+                                print ("\n\nping Interface VLAN " + server.vlanno + " Network " +  server.logicalnet + "  Broadcast address "  + server.broadcast)
+				time.sleep(4)
+			        if server.os == 'Linux':	
+                                	ping_server(re.sub('/[0-9]+','',server.broadcast),True,True)
+				else:
+                                	ping_server(re.sub('/[0-9]+','',server.broadcast),True,False)
+				
+def usage():
+	print "\n -h for help "
+	print " -q query of physical IP a server"
+	print " -Q to generate a host file of a server"
+	print " -l query of a logical server"
+	print " -L to generate a host file of a logical server"
+	print " -P 'physical server name ' -> ping all interface IP of a server"	
+	print " -p 'logical server name ' -> ping all interface IP of a server"	
+	print " -B -> ping broadcast  all attached network of localhost"
+
+
+	
+linuxos=['topz03','tffbz02','tffz02']
+phys_detail=[]
+logical_detail=[]
+Load_Master_Sheet(phys_detail)
+Load_Master_Sheet_Logical(logical_detail)
+#printallfqdn(phys_detail)
+#printalllogicalfqdn(logical_detail)
+#printalogicalhostinfo(logical_detail,hostname)
+
+##printahostinfo(phys_detail,hostname)
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hq:Q:l:L:G:P:p:B")
+		#opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "output="])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print str(err)  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+		
+    for o, a in opts:
+		if o == "-h":
+			usage()
+			sys.exit(0)
+		elif o == "-q":
+			printahostinfo(phys_detail,a)
+			#sys.exit(0)
+		elif o == "-Q":
+			generatehostfile(phys_detail,a)
+		elif o == "-l":
+			printalogicalhostinfo(logical_detail,a)
+		elif o == "-L":
+			generatehostfile(logical_detail,a)
+		elif o == "-P":
+			pingAllInt(phys_detail,a)
+		elif o == "-p":
+			pingAllInt(logical_detail,a)
+			
+		elif o == "-B":
+			pingBroadcastAllInt(phys_detail)
+		else:
+			assert False, "unhandled option"
+		 
+		#lif o == "-a
+		#adding account=true
+		#	adding account=true
+        #else:
+        #    assert False, "unhandled option"
+
+
+if __name__ == "__main__":
+	main()
+
+    
+	
+	
+	
+	

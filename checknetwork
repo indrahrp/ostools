@@ -1,0 +1,30 @@
+#!/bin/python
+
+import subprocess,re,pprint,csv
+from collections import OrderedDict
+
+
+
+def ping_server(serverIP):
+	for ping in range(1,10):
+    		address = "127.0.0." + str(ping)
+    		res = subprocess.call(['ping', '-c', '3', address])
+   		if res == 0:
+        		print "ping to", address, "OK"
+    		elif res == 2:
+        		print "no response from", address
+    		else:
+        		print "ping to", address, "failed!"
+
+def openfile():
+	with open('z2_physical.csv') as csvfile:
+                readCSV = csv.reader(csvfile, delimiter=',')
+                for row in readCSV:
+                        print "row 0 "+ row[0] + " hostname " + hostname
+                        if row[0].lower().strip() == hostname.lower().strip():
+                                server = row[0]
+                                slot = row[4]
+                                switch_name = row[5]
+                                switch_port = row[7]
+
+openfile()
