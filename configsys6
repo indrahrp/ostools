@@ -16,7 +16,7 @@ remote_path='/etc/resolv.conf'
 local_path='/var/tmp/collect/config/resolve.conf'
 #Transfering files to and from the remote machine
 
-####hostname='localhost'
+####AAAhostname='localhost'
 
 def ssh_connect(hostname,user='',passwd=''):
 	ssh = paramiko.SSHClient()
