@@ -1,0 +1,9 @@
+;
+.               99999999        IN      NS      ldapz1.out.z1.tdn.hzl.ilx.com
+                99999999        IN      NS      ldapz2.out.z1.tdn.hzl.ilx.com
+;
+;
+
+ldapz1.out.z1.tdn.hzl.ilx.com 99999999                IN      A       10.53.22.98
+ldapz2.out.z1.tdn.hzl.ilx.com 99999999                IN      A       10.53.22.99
+

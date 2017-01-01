@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+#	$Id$
+#
+
+PROCS=".usr.pkg.bin.perl.*procmon .usr.pkg.sbin.zhm"
+
+case $1 in
+'start')
+    echo "Starting local daemons..."
+
+    if [ -x /ilx/procmon/sbin/procmon.sh ]; then
+	echo "Starting procmon in 10 minutes..."
+	(sleep 600; su techsup -c /ilx/procmon/sbin/procmon.sh) &
+    fi
+
+#    if [ -r /etc/zephyr.servers ]; then
+#	ZHMSERV=`/usr/pkg/bin/perl -ne 'next if (/^\#/); chomp; print "$_ ";' /etc/zephyr.servers`
+#        if [ -x /usr/pkg/sbin/zhm ]; then
+#            echo "zhm \c"
+#            su techsup -c "/usr/pkg/sbin/zhm $ZHMSERV"
+#        fi
+#    fi
+    echo
+    ;;
+
+'stop')
+    for proc in $PROCS; do
+        PID=`/bin/ps -eopid,args | awk "/[0-9] $proc/ { print \\\$1 }"`
+	if [ -n "$PID" ]; then
+	    echo "Killing $proc as pid(s) $PID"
+	    kill $PID
+	fi
+    done
+    ;;
+*)
+    echo "`basename $0` : (start | stop)"
+    ;;
+esac

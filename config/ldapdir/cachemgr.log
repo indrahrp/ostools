@@ -1,0 +1,77 @@
+Fri May 27 10:47:37.3853	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri May 27 10:47:37.4280	sig_ok_to_exit(): parent exiting...
+Fri May 27 10:47:37.4287	Error: Unable to refresh profile:default:Session error no available conn.
+
+Fri May 27 10:47:37.4287	Error: Unable to update from profile
+Fri May 27 22:47:37.4297	Error: Unable to refresh profile:default:Session error no available conn.
+
+Fri May 27 22:47:37.4298	Error: Unable to update from profile
+Sat May 28 10:47:39.4319	Error: Unable to refresh profile:default:Session error no available conn.
+
+Sat May 28 10:47:39.4320	Error: Unable to update from profile
+Sat May 28 22:47:39.4335	Error: Unable to refresh profile:default:Session error no available conn.
+
+Sat May 28 22:47:39.4336	Error: Unable to update from profile
+Sun May 29 10:47:41.4378	Error: Unable to refresh profile:default:Session error no available conn.
+
+Sun May 29 10:47:41.4379	Error: Unable to update from profile
+Sun May 29 22:47:41.4404	Error: Unable to refresh profile:default:Session error no available conn.
+
+Sun May 29 22:47:41.4405	Error: Unable to update from profile
+Mon May 30 10:47:43.4440	Error: Unable to refresh profile:default:Session error no available conn.
+
+Mon May 30 10:47:43.4440	Error: Unable to update from profile
+Mon May 30 22:47:43.4474	Error: Unable to refresh profile:default:Session error no available conn.
+
+Mon May 30 22:47:43.4474	Error: Unable to update from profile
+Tue May 31 10:47:43.4515	Error: Unable to refresh profile:default:Session error no available conn.
+
+Tue May 31 10:47:43.4515	Error: Unable to update from profile
+Tue May 31 17:41:04.5059	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Tue May 31 17:41:04.5217	sig_ok_to_exit(): parent exiting...
+Tue May 31 17:41:04.5238	Error: Unable to refresh profile:default:Session error no available conn.
+
+Tue May 31 17:41:04.5238	Error: Unable to update from profile
+Tue May 31 17:43:10.1415	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Tue May 31 17:43:10.1607	sig_ok_to_exit(): parent exiting...
+Tue May 31 17:43:10.1630	Error: Unable to refresh profile:default:Session error no available conn.
+
+Tue May 31 17:43:10.1630	Error: Unable to update from profile
+Tue May 31 17:45:13.4011	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Tue May 31 17:45:13.4164	sig_ok_to_exit(): parent exiting...
+Tue May 31 17:45:13.4186	Error: Unable to refresh profile:default:Session error no available conn.
+
+Tue May 31 17:45:13.4187	Error: Unable to update from profile
+Tue May 31 18:06:20.6275	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Tue May 31 18:06:20.6418	sig_ok_to_exit(): parent exiting...
+Tue May 31 18:06:20.6440	Error: Unable to refresh profile:default:Session error no available conn.
+
+Tue May 31 18:06:20.6440	Error: Unable to update from profile
+Tue May 31 18:06:36.3821	getldap_set_refresh_ttl:(6) refresh ttl is 15 seconds
+Tue May 31 18:06:36.3858	getldap_set_refresh_ttl:(6) refresh ttl is 15 seconds
+Tue May 31 18:06:36.3893	getldap_set_refresh_ttl:(6) refresh ttl is 15 seconds
+Wed Jun  1 06:06:20.6472	Error: Unable to refresh profile:default:Session error no available conn.
+
+Wed Jun  1 06:06:20.6472	Error: Unable to update from profile
+Wed Jun  1 18:06:20.6505	Error: Unable to refresh profile:default:Session error no available conn.
+
+Wed Jun  1 18:06:20.6505	Error: Unable to update from profile
+Thu Jun  2 06:06:22.6544	Error: Unable to refresh profile:default:Session error no available conn.
+
+Thu Jun  2 06:06:22.6544	Error: Unable to update from profile
+Thu Jun  2 11:53:16.3540	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Thu Jun  2 11:53:16.3869	sig_ok_to_exit(): parent exiting...
+Fri Jun 17 13:18:25.6488	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jun 17 13:18:26.0081	sig_ok_to_exit(): parent exiting...
+Fri Jun 17 13:18:26.0110	Error: Unable to refresh profile:default:Session error no available conn.
+
+Fri Jun 17 13:18:26.0110	Error: Unable to update from profile
+Wed Jul 13 13:19:16.2837	getldap_set_refresh_ttl:(6) refresh ttl is 21600 seconds
+Thu Jul 14 13:19:16.9715	getldap_set_refresh_ttl:(6) refresh ttl is 21600 seconds
+Fri Jul 15 13:19:18.2821	getldap_set_refresh_ttl:(6) refresh ttl is 21600 seconds
+Fri Jul 22 16:21:25.8649	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jul 22 16:23:26.8363	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jul 22 16:25:27.8560	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jul 22 16:27:28.8796	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jul 22 16:31:30.7761	Starting ldap_cachemgr, logfile /var/ldap/cachemgr.log
+Fri Jul 22 16:31:30.8032	sig_ok_to_exit(): parent exiting...

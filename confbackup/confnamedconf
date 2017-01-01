@@ -1,0 +1,19 @@
+options {
+        directory "/var/named";
+        version "BIND";
+        allow-recursion { "any"; };
+        check-names master ignore;
+        check-names slave ignore;
+        check-names response ignore;
+
+};
+
+zone "." {
+        type hint;
+        file "named.ca";
+};
+
+zone "0.0.127.IN-ADDR.ARPA" {
+        type master;
+        file "named.local";
+};

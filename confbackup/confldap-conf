@@ -1,0 +1,18 @@
+
+#
+# LDAP Defaults
+#
+
+# See ldap.conf(5) for details
+# This file should be world readable but not world writable.
+
+#BASE   dc=example,dc=com
+#URI    ldap://ldap.example.com ldap://ldap-master.example.com:666
+
+#SIZELIMIT      12
+#TIMELIMIT      15
+#DEREF          never
+SUDOERS_BASE    dc=tdn,dc=hzl,dc=ilx,dc=com
+NETGROUP_BASE   dc=tdn,dc=hzl,dc=ilx,dc=com
+URI     ldap://ldapz1.out.z1.tdn.hzl.ilx.com ldap://ldapz2.out.z2.tdn.hzl.ilx.com
+#SUDOERS_DEBUG  2

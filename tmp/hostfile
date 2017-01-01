@@ -1,0 +1,13 @@
+#
+# Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+# Internet host table
+#
+::1             localhost
+127.0.0.1       localhost
+
+10.53.21.33  phys-tigerz2.hyper.z2.tdn.hzl.ilx.com phys-tigerz2 loghost
+
+10.53.22.98  ldapz1.out.z1.tdn.hzl.ilx.com ldapz1
+10.53.22.99  ldapz1.out.z2.tdn.hzl.ilx.com ldapz2

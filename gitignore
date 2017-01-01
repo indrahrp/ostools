@@ -1,0 +1,10 @@
+detailxls
+confbackup
+config
+newconfig
+tmp
+.gitignore
+.project
+*.pyc
+*.xls
+*.csv
