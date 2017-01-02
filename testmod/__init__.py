@@ -1,4 +1,4 @@
-import unittest
+import unittest,configsysmod
 def add(x,y):
    return x + y
    
@@ -53,6 +53,8 @@ class simpleTest2(unittest.TestCase):
       result = self.a-self.b
       self.assertTrue(result == -10)
 
-
+   def testconfigh(self):
+       var=configsysmod.usage()
+       
 if __name__ == '__main__':
    unittest.main()
