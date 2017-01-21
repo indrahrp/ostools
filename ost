@@ -24,8 +24,8 @@ def ssh_connect(hostname,user='',passwd=''):
 	try:
 		if not  passwd:
 		        print "try to connect"	
-       			#ssh.connect('localhost', username='root', password='abc123')
-       			ssh.connect(hostname, username='root', password='abc123', timeout=10)
+       			#ssh.connect('localhost', username='root', password='1vagrant')
+       			ssh.connect(hostname, username='root', password='1vagrant', timeout=10)
 			return ssh
 		else:
        			ssh.connect(hostname, username=user, password=passwd)
