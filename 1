@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import string,paramiko,getopt,sys,copy,os,time,socket
+import paramiko,getopt,sys,copy,os,time,socket
 from pyssh import PySSH
 
 #rootdir='/var/tmp/collect2'
@@ -150,9 +150,7 @@ def put_namedfiles(hostname,type='hyper'):
         with open(conffilew, "w") as fout:
 		with open(conffiler, "r") as fin:
         		for line in fin:
-				line=string.replace(line,'template',hostname)
-				line=string.replace(line,'type',type)
-                                #print "line is " + line 
+			        line.replace('template',hostname)	
 				#line.replace('type',type)
             			fout.write(line)
             			#fout.write(line.replace('type', type))
@@ -374,7 +372,7 @@ def usage():
 	print "\n -h for help "
 	print " -R hostname  -t web,prod,hyper,tc -> update resolv.conf with  type of web,prod,host,ext " 
 	print " -N hostname -> to update nsswitch.conf"
-	print " -L hostname -> to configure local DNS -l type (hyper,web,ext or host)"
+	print " -L hostname -> to configure local DNS"
         print " -D hostname -> to configure ldapclient" 
         print " -Z hostname,nn -> to update zephyr.server ( ie. -Z birdiez2,12 fo zephyrz1/2 and -Z birdiez2,34 for zephyrz3/4" 
   	print " -X hostname -x 'command to execute' ( ie. -X marketz2 -x 'ipadm' "
@@ -394,7 +392,7 @@ def main():
     resolv=False
     host=None
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hR:r:N:n:L:l:D:Z:X:x:P:S:t:A:O:C:H:Y:y:M:G:K:")
+        opts, args = getopt.getopt(sys.argv[1:], "hR:r:N:n:L:D:Z:X:x:P:S:t:A:O:C:H:Y:y:M:G:K:")
     except getopt.GetoptError as err:
         print str(err)  # will print something like "option -a not recognized"
         usage()
@@ -429,10 +427,7 @@ def main():
 		elif o == "-n":
 			get_nsswitch('confnsswitch',a)
 		elif o == "-L":
-                        named=True
-			host=a
-		elif o == "-l":
-			put_namedfiles(host,a)
+			put_namedfiles(a)
 		elif o == "-D":
 			ldapclient_init(a)
 		elif o == "-Z":
