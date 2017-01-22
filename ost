@@ -2,7 +2,9 @@
 import paramiko,getopt,sys,copy,os,time,socket
 ##from pyssh import PySSH
 
-rootdir='/var/tmp/collect2'
+#rootdir='/var/tmp/collect2'
+
+rootdir=os.path.dirname(os.path.realpath(__file__))
 conf=rootdir + '/config/'
 tmp=rootdir + '/tmp/'
 stdoutcp=''
@@ -24,8 +26,8 @@ def ssh_connect(hostname,user='',passwd=''):
 	try:
 		if not  passwd:
 		        print "try to connect"	
-       			#ssh.connect('localhost', username='root', password='abc123')
-       			ssh.connect(hostname, username='root', password='abc123', timeout=10)
+       			#ssh.connect('localhost', username='root', password='1vagrant')
+       			ssh.connect(hostname, username='root', password='1vagrant', timeout=10)
 			return ssh
 		else:
        			ssh.connect(hostname, username=user, password=passwd)
@@ -65,7 +67,10 @@ def exec_cmd(hostname,cmd,user='',pwd=''):
 		return ssh
 
 def ldapclient_init(hostname):
-        cmd="/usr/sbin/ldapclient init -v -a profileName=default -a domainName=tdn.hzl.ilx.com -a proxyDN=cn=proxyagent,ou=profile,dc=tdn,dc=hzl,dc=ilx,dc=com -a proxyPassword=\"proxyauth\" -a enableShadowUpdate=FALSE ldapz1.out.z1.tdn.hzl.ilx.com:389"
+        #cmd="/usr/sbin/ldapclient init -v -a profileName=default -a domainName=tdn.hzl.ilx.com -a proxyDN=cn=proxyagent,ou=profile,dc=tdn,dc=hzl,dc=ilx,dc=com -a proxyPassword=\"proxyauth\" -a enableShadowUpdate=FALSE ldapz1.out.z1.tdn.hzl.ilx.com:389"
+        cmd="/usr/sbin/ldapclient init -v -a profileName=default -a domainName=tdnqa.pln.ilx.com -a proxyDN=cn=proxyagent,ou=profile,dc=tdnqa,dc=ilx,dc=com -a proxyPassword=\"proxyauth\" -a enableShadowUpdate=FALSE ldapa1.out.a1.tdnqa.pln.ilx.com:389"
+
+
         exec_cmd(hostname,cmd)
 	print("copying file of ldapz1 /var/ldap/cert8.db");
 	remote_path='/var/ldap/cert8.db'

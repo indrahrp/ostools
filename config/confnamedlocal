@@ -1,15 +1,14 @@
 $TTL 86400
-@               IN      SOA     template.out.z2.tdn.hzl.ilx.com. root.template.out.z2.tdn.hzl.ilx.com. (
+@               IN      SOA     template.hyper.a1.tdnqa.pln.ilx.com. root.template.hyper.a1.tdnqa.pln.ilx.com. (
                                 2015112500      ; Serial
                                 10800           ; refresh
                                 3600            ; retry
                                 3600000         ; expire
                                 86400           ;
                                 )
-                IN      NS      template.out.z2.tdn.hzl.ilx.com.
+                IN      NS      template.hyper.a1.tdnqa.pln.ilx.com.
 1               IN      PTR     localhost.
 localhost.      IN      A       127.0.0.1
 loopback.       IN      A       127.0.0.1
 me.             IN      A       127.0.0.1
-
 
