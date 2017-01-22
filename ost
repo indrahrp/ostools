@@ -140,7 +140,7 @@ def read_conf_file(filename,hostname):
         read_stdout_err_in(stdout,stderr)
 	ssh.close()
 
-def put_namedfiles(hostname):
+def put_namedfiles(hostname,type='hyper'):
 	print "generate named.local"
         print "create directory /var/named" 
         exec_cmd(hostname,'mkdir /var/named')
@@ -151,6 +151,7 @@ def put_namedfiles(hostname):
 		with open(conffiler, "r") as fin:
         		for line in fin:
             			fout.write(line.replace('template', hostname))
+            			fout.write(line.replace('type', type))
 
 	print("Putting named.local");
 	remote_path='/var/named/named.local'
