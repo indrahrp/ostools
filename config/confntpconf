@@ -1,7 +1,11 @@
-driftfile /var/xntp/drift
-pidfile /var/xntp/ntpd.pid
-keys /etc/inet/ntp.keys
-broadcastdelay 0.025
-enable auth
-trustedkey 28
-broadcastclient yes
+server          10.185.5.1 prefer
+server          10.185.5.2 prefer
+server          127.0.0.1
+broadcast       10.185.202.31 key 33
+broadcast       10.185.202.63 key 34
+keys            /etc/inet/ntp.keys
+trustedkey      33 34
+driftfile       /var/xntp/drift
+statsdir        /var/xntp/
+pidfile         /var/xntp/ntpd.pid
+
