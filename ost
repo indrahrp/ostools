@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import paramiko,getopt,sys,copy,os,time,socket
-##from pyssh import PySSH
+from pyssh import PySSH
 
 #rootdir='/var/tmp/collect2'
 
@@ -219,7 +219,7 @@ def import_ns_and_autofs(hostname):
 	exec_cmd(hostname,'nscfg import -f name-service/switch')
 	exec_cmd(hostname,'svcadm restart name-service/switch')
 	print "configure mapid"
-        exec_cmd(hostname,'sharectl set -p nfsmapid_domain=tdn.hzl.ilx.com nfs')
+        exec_cmd(hostname,'sharectl set -p nfsmapid_domain=tdnqa.pln.ilx.com nfs')
 	print "importing dns/clent" 
         exec_cmd(hostname,'nscfg import -f dns/client')
 	print "configuring nfs"
@@ -331,6 +331,7 @@ def install_monet(hostname):
         local_path=tmp + 'Monet.6.112.1.solaris10.ultra3.run'
     	put_get_file(local_path,remote_path,True,hostname)
 	print "Installing monet now on " + hostname 
+	exec_cmd(hostname,'cd /var/tmp;chmod +x Monet.6.112.1.solaris10.ultra3.run')
 	exec_cmd(hostname,'cd /var/tmp;./Monet.6.112.1.solaris10.ultra3.run')
 
 
@@ -340,8 +341,8 @@ def install_monet(hostname):
 def install_procmon(hostname):
 	global sshhandle,procmonsvr
 	print "checking if procmon ssh key exist on " + hostname 
-        username = 'indrah'
-        password = 'h0gKRmqU'
+        username = 'root'
+        password = '1vagrant'
     	ssh = PySSH()
     	ssh.connect(hostname,username,password)
     	output=ssh.runcmd('date')
