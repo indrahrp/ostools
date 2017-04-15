@@ -1,0 +1,216 @@
+#!/usr/bin/python
+import string,paramiko,getopt,sys,copy,os,time,socket
+#from pyssh import PySSH
+
+#rootdir='/var/tmp/collect2'
+
+rootdir=os.path.dirname(os.path.realpath(__file__))
+conf=rootdir + '/config/'
+tmp=rootdir + '/tmp/'
+stdoutcp=''
+stderrcp=''
+stdouttcplist=[]
+sshhanddle=''
+procmonsvr = 'procmonz1'
+ 
+def creds():
+    global username, password, en_password
+    print '\n\n'
+    print '\n\n Please enter username, password \n'
+    print '\t(Note that Username is the only one that shows ' \
+          'up while typing, passwords are not shown.)\n\n'
+    username = raw_input(' Enter Username: ')
+    password = getpass.getpass(' Enter Password: ')
+  
+ 
+ 
+
+def ssh_connect(hostname,user='',passwd=''):
+	ssh = paramiko.SSHClient()
+	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	try:
+		if not  passwd:
+		        print "try to connect"	
+       			#ssh.connect('localhost', username='root', password='1vagrant')
+       			ssh.connect(hostname, username='root', password='1vagrant', timeout=10)
+			return ssh
+		else:
+       			ssh.connect(hostname, username=user, password=passwd)
+			return ssh
+			
+	#except paramiko.SSHException:
+        except socket.error, e:
+  	      print "Socket connection failed ", e
+	      quit()
+
+	except paramiko.SSHException, e:
+              print "Connection Failed",e
+              quit()
+
+def read_stdout_err_in(stdout,stderr,stdin):
+      	#print "sending stdin "
+ 	global stdoutcp,stderrcp
+	global stdouttcplist
+	#stdin.flush() 
+      	print " reading stdout and stderr "
+        for line in stdout.readlines():
+	       	stdoutcp=line.strip()		
+		stdouttcplist=stdouttcplist + [line.strip()]
+         	print line.strip()
+	for line in stderr.readlines():
+		stderrcp=line.strip()
+        	print line.strip()
+	#for line in stdin.readlines():
+        #	print line.strip()
+
+def exec_cmd(hostname,cmd,user='',pwd=''):
+	print "executing " + cmd
+	ssh=ssh_connect(hostname,user,pwd)
+	if ssh:
+        	stdin,stdout,stderr = ssh.exec_command(cmd)
+        	read_stdout_err_in(stdout,stderr,stdin)
+		return ssh
+
+
+def put_get_file(local_path,remote_path,put,hostname):
+	print "in put_get_file "
+	ssh=ssh_connect(hostname)
+	sftp = ssh.open_sftp()
+        if put is True:
+	        print "in put file "
+		sftp.put(local_path, remote_path)
+		sftp.close()
+		ssh.close()
+	else:
+		sftp.get(remote_path, local_path)
+		sftp.close()
+
+		ssh.close()
+
+def usage():
+	print "\n -h for help "
+	print " -R hostname  -t web,prod,hyper,tc -> update resolv.conf with  type of web,prod,host,ext " 
+	print " -N hostname -> to update nsswitch.conf"
+	print " -L hostname -> to configure local DNS -l type (hyper,web,ext or host)"
+        print " -D hostname -> to configure ldapclient" 
+        print " -Z hostname,nn -> to update zephyr.server ( ie. -Z birdiez2,12 fo zephyrz1/2 and -Z birdiez2,34 for zephyrz3/4" 
+  	print " -X hostname -x 'command to execute' ( ie. -X marketz2 -x 'ipadm' "
+	print " -P hostname  -> to update ntp files"
+        print " -S hostname -> disable some services"
+        print " -A hostname -> import name service, nfs and autofs"
+	print " -O hostname -> implement LDAP sudo"
+	print " -C hostname -> remove SMF procmon, copy start up script and update crontab of techsup"
+        print " -H hostname -> hostfile and service file link to /etc/sysadmin/ directory "		
+        print " -Y hostname -y GMT0, EST5EDT, US/Eastern -> set server time zone "		
+        print " -M hostname -> Install Monet"		
+        print " -G hostname -> Install Procmon"		
+	print " -K hostname -> configure ssh ClientAliveInterval"
+
+def main():
+    execflag=False
+    resolv=False
+    host=None
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hR:r:N:n:L:l:D:Z:X:x:P:S:t:A:O:C:H:Y:y:M:G:K:")
+    except getopt.GetoptError as err:
+        print str(err)  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+		
+    for o, a in opts:
+		if o == "-h":
+			usage()
+			sys.exit(0)
+		elif o == "-R": 
+			resolv=True
+		        host=a	
+		elif o == "-t": 
+			if resolv:
+				if a == 'prod':
+					put_resolv('confresolvprod',host)
+				elif a == 'hyper':
+					put_resolv('confresolvhyper',host)
+				elif a == 'web':
+					put_resolv('confresolvweb',host)
+				elif a == 'host':
+					put_resolv('confresolvhost',host)
+				elif a == 'ext':
+					put_resolv('confresolvext',host)
+				elif a == 'webhost':
+					put_resolv('confresolvwebhost',host)
+
+		elif o == "-r": 
+			get_resolv('confresolv',a)
+		elif o == "-N":
+			put_nsswitch('confnsswitch',a)
+		elif o == "-n":
+			get_nsswitch('confnsswitch',a)
+		elif o == "-L":
+                        named=True
+			host=a
+		elif o == "-l":
+			put_namedfiles(host,a)
+		elif o == "-D":
+			ldapclient_init(a)
+		elif o == "-Z":
+	                if a.endswith(',12'):     			
+				a=a.replace(',12','')
+				put_zephyr(a,12)
+	                elif a.endswith(',34'):					
+				
+				a=a.replace(',34','')
+				put_zephyr(a,34)
+		elif o == "-X":
+                        execflag=True
+			exechost=a
+                elif o == "-x":
+			if execflag:
+				exec_cmd(exechost,a)
+                elif o == "-P":
+			put_ntpfiles(a)
+
+                elif o == "-S":
+			disable_someservices(a)
+
+                elif o == "-O":
+			imp_ldap_sudo(a)
+
+                elif o == "-A":
+		  	import_ns_and_autofs(a)	
+
+                elif o == "-C":
+		  	replace_procmon_SMF(a)	
+
+                elif o == "-H":
+		  	create_hostfile(a)	
+
+		elif o == "-Y":
+                        execflag=True
+			exechost=a
+
+                elif o == "-y":
+			print " in -z"
+			if execflag:
+				print "x in -z"
+				set_timezone(exechost,a)
+                elif o == "-M":
+		  	install_monet(a)	
+
+                elif o == "-G":
+		  	install_procmon(a)	
+
+                elif o == "-K":
+		  	ssh_keepalive(a)	
+		else:
+			usage()
+			assert False, "unhandled option"
+		 
+        #else:
+        #    assert False, "unhandled option"
+
+
+
+if __name__ == "__main__":
+	main()
+
+

@@ -1,0 +1,29 @@
+lo0: flags=2001000849<UP,LOOPBACK,RUNNING,MULTICAST,IPv4,VIRTUAL> mtu 8232 index 1
+	inet 127.0.0.1 netmask ff000000 
+igb0: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 1500 index 2
+	inet 10.186.30.4 netmask ffffffc0 broadcast 10.186.30.63
+	ether 0:10:e0:1f:ae:26 
+igb1: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 1500 index 3
+	inet 10.101.11.1 netmask ffff0000 broadcast 10.101.255.255
+	ether 0:10:e0:1f:ae:27 
+igb2: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 1500 index 4
+	inet 10.186.30.68 netmask ffffffc0 broadcast 10.186.30.127
+	ether 0:10:e0:1f:ae:28 
+igb3: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 1500 index 5
+	inet 199.119.58.12 netmask ffffffc0 broadcast 199.119.58.63
+	ether 0:10:e0:1f:ae:29 
+ixgbe0: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 6
+	inet 10.186.8.69 netmask ffffffe0 broadcast 10.186.8.95
+	ether 90:e2:ba:40:3c:40 
+ixgbe1: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 7
+	inet 10.186.7.9 netmask ffffffc0 broadcast 10.186.7.63
+	ether 90:e2:ba:40:3c:41 
+ixgbe2: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 8
+	inet 10.186.9.7 netmask ffffff80 broadcast 10.186.9.127
+	ether 90:e2:ba:40:3c:f0 
+ixgbe4: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 9
+	inet 10.110.15.101 netmask ffffff00 broadcast 10.110.15.255
+	ether 90:e2:ba:3e:d2:fc 
+ixgbe5: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 10
+	inet 10.110.16.101 netmask ffffff00 broadcast 10.110.16.255
+	ether 90:e2:ba:3e:d2:fd 

@@ -1,0 +1,79 @@
+#!/usr/bin/python
+
+
+import string,paramiko,getopt,sys,copy,os,time,socket
+import getpass
+
+
+def spremgw(host):
+     creds() 
+     connect(host)    
+     print "diluar \n"
+     remote_conn.send('show /SP/network \n')
+     time.sleep(5)
+     output = remote_conn.recv(5000)
+     print "show /SP/nework output is " + output
+
+
+def creds():
+    global username, password, en_password
+    print '\n Please enter root password of SP:\n'
+    #password = getpass.getpass(' Enter Password: ')
+    password = 'changeme'
+
+
+
+def connect(host):
+    creds()
+    global remote_conn
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    remote_conn = ()
+    try:
+     print '\nConnecting to %s\n' % host 
+     print '\n pwd is ' + password
+     client.connect(host,
+                       username='root',
+                       password=password,
+                       timeout=5)
+     print '\nSSH session established with %s' % host
+     remote_conn = client.invoke_shell()
+     output = remote_conn.recv(1000)
+
+     time.sleep(5)
+     #print "output is first " + output
+               
+                                   
+                        
+    except paramiko.SSHException:
+     print '\t*** Authentication Failed ***'
+    except socket.error:
+        print '\t*** %s is Unreachable ***' % host
+    client.close()
+
+
+def usage():
+        print "\n -h for help "
+        print " -o hostname remove default gateway "
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "s:")
+    except getopt.GetoptError as err:
+        print str(err)  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+
+    for o, a in opts:
+                if o == "-h":
+                        usage()
+                        sys.exit(0)
+
+                elif o == "-s":
+                        spremgw(a)
+
+
+
+if __name__ == "__main__":
+        main()
+

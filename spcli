@@ -1,0 +1,107 @@
+#!/usr/bin/python
+# created by Indra Harahap , March 1,2017 ver 1.0
+#
+
+import string,paramiko,getopt,sys,copy,os,time,socket
+import getpass
+
+
+def gspremgw(filelist):
+	with open(filelist, 'r') as f:
+    		for host in f:
+	        	print "\n\n**********Removing SP gateway  "+ host.strip() + "************\n"			
+	                spremgw(host.strip())	
+
+
+
+def spremgw(host):
+        connect(host) 	
+	output=cmdtoshell('show /SP/network')
+	output=cmdtoshell('cd /SP/network')
+        if '/SP/network' in output:
+		print "In Directory /SP/network"
+		output=cmdtoshell('set pendingipgateway=0.0.0.0')
+                if "Set 'pendingipgateway' to '0.0.0.0'"  in output:
+			print "pendinggateway has been set to 0.0.0.0"
+                	output=cmdtoshell('set commitpending=true') 
+		        if "Set 'commitpending' to 'true'" in output:
+				print "SP gateway removal of "+ host + " is complete"	
+        client.close()			
+							
+
+
+def cmdtoshell(cmd):
+        remote_conn.send(cmd + '\n')
+        time.sleep(5)
+        output = remote_conn.recv(5000)
+        print "\n\n====Session  Output of command  " + cmd + "=====  \n\n" + output + "\n\n"
+	return output
+	
+
+
+def creds():
+    global password 
+    password = []
+    ### comment the following 3 lines to prompt password and commentoupt password = ['XXXXXX', ...]"
+    ##print '\n Please enter root password of SP:\n'
+    ##passenter = getpass.getpass(' Enter Password: ')
+    ##password.append(passenter)
+    password = ['S;N;$teR','changeme']
+
+
+
+def connect(host):
+    global remote_conn,client
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    remote_conn = ()
+    for pwd in password:
+    	try:
+    		print '\nConnecting to %s\n' % host 
+		print '\npwd is ' + pwd
+       	        client.connect(host,
+                       username='root',
+                       password=pwd,
+                       timeout=5)
+        	print '\nSSH session established with %s' % host
+        	remote_conn = client.invoke_shell()
+		time.sleep(5)
+	        if remote_conn:
+			break	
+		#output = remote_conn.recv(5000)
+    	except paramiko.SSHException:
+    		print '\t*** Authentication Failed ***'
+	        continue 	
+    	except socket.error:
+       		print '\t*** %s is Unreachable ***' % host
+
+def usage():
+        print "\n -h for help "
+        print " -s hostname  - removing SP default gateway "
+        print " -S Filename containing server list - removing SP default gateway for a group of server "
+
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "s:S:h")
+    except getopt.GetoptError as err:
+	print str(err)
+        usage()
+
+    for o, a in opts:
+                if o == "-h":
+                        usage()
+                        sys.exit(0)
+
+                elif o == "-s":
+			creds()
+                        spremgw(a)
+
+                elif o == "-S":
+			creds()
+			gspremgw(a)
+
+
+if __name__ == "__main__":
+        main()
+
