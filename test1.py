@@ -96,6 +96,7 @@ result=OrderedDict()
 intfresult=OrderedDict()
 z2_detail=OrderedDict()
 dladm_showphys(phys)
+print "phys is " + string(phys)
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
