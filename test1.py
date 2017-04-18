@@ -44,7 +44,7 @@ def dladm_showphys(phys):
         active_link=subprocess.Popen(['dladm','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         lines=active_link.communicate()[0]
 	for line in lines.split('\n'):
-		interface_up=re.compile(r'(net[0-9]+).*up\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e)([0-9]+)')
+		interface_up=re.compile(r'(net[0-9]+).*up\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e|e1000g)([0-9]+)')
                 result=interface_up.findall(line) 
                 for res in result:
 	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
