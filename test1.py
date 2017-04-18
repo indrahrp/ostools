@@ -20,7 +20,7 @@ def find_int(str1):
     #(ixgbe|igb|lo)(\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{7}).*\n\s+ether\s+(\w\w:\w\w:\w\w:\w\w:\w\w:\w\w)
     #''',re.IGNORECASE | re.VERBOSE)
     Regex = re.compile(r'''
-    (ixgbe\d+|igb\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{7}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
+    (ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{7}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
     ''',re.IGNORECASE | re.VERBOSE)
 
     
