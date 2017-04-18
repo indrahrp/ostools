@@ -110,6 +110,7 @@ z2_detail=OrderedDict()
 dladm_showphys(phys)
 print "phys is " + str(phys)
 search_dev='e1000g0'
+nintlist=[]
 for int in intl:
 	print "int for looking for netname is " + str(int) +' \n'
 	search_dev=int[0]
@@ -118,11 +119,12 @@ for int in intl:
 			print "netname for " +  " search_dev is " + netname
 			intl
 			int.append(netname)
+			nintlist.append(int)
 			break
 			#print values['device']
 print "after all " + str(intl)
 
-ipadm_setip(intl)
+ipadm_setip(nintlist)
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
