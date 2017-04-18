@@ -97,6 +97,11 @@ intfresult=OrderedDict()
 z2_detail=OrderedDict()
 dladm_showphys(phys)
 print "phys is " + str(phys)
+search_dev='e1000g0'
+for netname, values in phys.items():
+    if netname['device'] == search_dev:
+        print "netname for " +  " search_dev is " + netname
+
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
