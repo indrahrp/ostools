@@ -47,7 +47,7 @@ def dladm_showphys(phys):
 		interface_up=re.compile(r'(net[0-9]+).*up\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e)([0-9]+)')
                 result=interface_up.findall(line) 
                 for res in result:
-	    		debug print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
+	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
 			phys.setdefault(res[0],{})
                         phys[res[0]]['speed']=res[1]
 			phys[res[0]]['duplex']=res[2]
