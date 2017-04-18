@@ -70,7 +70,7 @@ for int in intl:
 
 
     
-fh=open(r'C:\Python27\mine\network\showrun2800router.txt')
+#fh=open(r'C:\Python27\mine\network\showrun2800router.txt')
 
 #egex = re.compile(r'''
 #   interface\s?(Vlan|gigabitethernet|fastethernet)(\d+/?)+\s*
