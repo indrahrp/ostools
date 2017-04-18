@@ -56,7 +56,14 @@ def dladm_showphys(phys):
 
 
 
-
+def ipadm_setip(intlist):
+        print "ipadm setting up  .."	
+        for int in	intlist:
+        
+        	active_link=subprocess.Popen(['ipadm','-T','static','-a','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	lines=active_link.communicate()[0]
+			
+		
 def ReadSwitchConfigFromFile(Filename):
 	readfile=open(Filename,'r')
 	result=readfile.read()
@@ -99,10 +106,17 @@ z2_detail=OrderedDict()
 dladm_showphys(phys)
 print "phys is " + str(phys)
 search_dev='e1000g0'
-for netname, values in phys.items():
-	if values['device'] == search_dev:
-		print "netname for " +  " search_dev is " + netname
-	    #print values['device']
+for int in intl:
+	print "int is " + str(int) +' \n'
+	search_dev=int[0]
+	for netname, values in phys.items():
+		if values['device'] == search_dev:
+			print "netname for " +  " search_dev is " + netname
+			intl
+			int[5]=netname
+			break
+			#print values['device']
+print "after all " + str(intl)
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
