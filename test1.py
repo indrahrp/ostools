@@ -59,10 +59,14 @@ def dladm_showphys(phys):
 def ipadm_setip(intlist):
         print "ipadm setting up  .."	
         for int in	intlist:
-        
-        	active_link=subprocess.Popen(['ipadm','-T','static','-a','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	lines=active_link.communicate()[0]
-			
+        	print "lines 1 is " + lines
+        	
+        	active_link=subprocess.Popen(['ipadm','-T','static','-a',int[2],int[5],'/24'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	
+        	lines=active_link.communicate()[0]
+        	print "lines 2 is " + lines		
 		
 def ReadSwitchConfigFromFile(Filename):
 	readfile=open(Filename,'r')
@@ -117,6 +121,8 @@ for int in intl:
 			break
 			#print values['device']
 print "after all " + str(intl)
+
+ipadm_setip(intl)
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
