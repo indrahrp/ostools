@@ -49,7 +49,8 @@ def dladm_showphys(phys):
                 for res in result:
 	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
 			phys.setdefault(res[0],{})
-                        phys[res[0]]['speed']=res[1]
+			
+			phys[res[0]]['speed']=res[1]
 			phys[res[0]]['duplex']=res[2]
 			phys[res[0]]['device']=res[3]+res[4]
 
@@ -99,9 +100,9 @@ dladm_showphys(phys)
 print "phys is " + str(phys)
 search_dev='e1000g0'
 for netname, values in phys.items():
-    #if netname['device'] == search_dev:
-    #   print "netname for " +  " search_dev is " + netname
-	print netname['device']
+	if values['device'] == search_dev:
+		print "netname for " +  " search_dev is " + netname
+	    #print values['device']
 #dladm_showphys_L(phys,physL)
 
 ##print "phys"
