@@ -113,7 +113,7 @@ for int in intl:
 		if values['device'] == search_dev:
 			print "netname for " +  " search_dev is " + netname
 			intl
-			int[5]=netname
+			int.append(netname)
 			break
 			#print values['device']
 print "after all " + str(intl)
