@@ -59,6 +59,7 @@ def dladm_showphys(phys):
 def ipadm_setip(intlist):
         print "ipadm setting up  .."	
         for int in	intlist:
+        	print "ipadm assign to " + str(int)
         	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	lines=active_link.communicate()[0]
         	print "lines 1 is " + lines
