@@ -61,12 +61,14 @@ def ipadm_setip(intlist):
         for int in	intlist:
         	print "ipadm assign to " + str(int)
         	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        	lines=active_link.communicate()[0]
+        	#lines=active_link.communicate()[0]
+        	lines=active_link.communicate()
+        	
         	print "lines 1 is " + lines
         	
         	active_link=subprocess.Popen(['ipadm','-T','static','-a',int[2],int[5],'/24'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	
-        	lines=active_link.communicate()[0]
+        	lines=active_link.communicate()
         	print "lines 2 is " + lines		
 		
 def ReadSwitchConfigFromFile(Filename):
