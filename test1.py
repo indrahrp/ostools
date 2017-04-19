@@ -66,7 +66,7 @@ def ipadm_setip(intlist):
         	
         	print "lines 1 is " + str(lines)
         	
-        	active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2],'/24',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/24',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	
         	lines=active_link.communicate()
         	print "lines 2 is " + str(lines)		
