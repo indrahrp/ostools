@@ -13,7 +13,7 @@ def exec_command(command):
         print "Output " + lines[0]
         print "Error " + lines[1]
         
-cmd_list=['cp /etc/hosts $backupdir']
+cmd_list=['cp /etc/hosts backupdir']
 for cmd in cmd_list:
     exec_command(cmd)
 
