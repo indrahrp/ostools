@@ -64,12 +64,12 @@ def ipadm_setip(intlist):
         	#lines=active_link.communicate()[0]
         	lines=active_link.communicate()
         	
-        	print "lines 1 is " + lines
+        	print "lines 1 is " + str(lines)
         	
         	active_link=subprocess.Popen(['ipadm','-T','static','-a',int[2],int[5],'/24'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	
         	lines=active_link.communicate()
-        	print "lines 2 is " + lines		
+        	print "lines 2 is " + str(lines)		
 		
 def ReadSwitchConfigFromFile(Filename):
 	readfile=open(Filename,'r')
