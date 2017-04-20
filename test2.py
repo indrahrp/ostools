@@ -15,7 +15,7 @@ def exec_command(command):
         
 cmd_list=['cp /etc/hosts ' + backupdir,
           'cp /etc/services ' + backupdir,
-           'netstat -ni > ' + backupdir + 'netstatni.txt'
+           'netstat -nij > ' + backupdir + 'netstatni.txt'
            'ipadm > ' + backupdir + 'ipadm.txt']
 for cmd in cmd_list:
     exec_command(cmd)
