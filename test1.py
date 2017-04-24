@@ -1,4 +1,4 @@
-import getopt,sys,os,re
+import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
 #from pip._vendor.distlib.resources import finder

@@ -13,10 +13,13 @@ def exec_command(command):
         print "Output " + lines[0]
         print "Error " + lines[1]
         
-cmd_list=['cp /etc/hosts ' + backupdir,
+cmd_list_backup=['cp /etc/hosts ' + backupdir,
           'cp /etc/services ' + backupdir,
-           'netstat -nij > ' + backupdir + 'netstatni.txt'
+           'netstat -ni > ' + backupdir + 'netstatni.txt'
            'ipadm > ' + backupdir + 'ipadm.txt']
+cmd_list_restore=['mkdir /etc/sysadmin && (mv /etc/inet/hosts /etc/inet/services /etc/sysadmin/;ln -s /etc/sysadmin/hosts /etc/inet/hosts;ln -s /etc/sysadmin/services /etc/inet/services)',
+                 'cp /etc/ntp.keys /etc/' ]
+
 for cmd in cmd_list:
     exec_command(cmd)
 
