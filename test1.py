@@ -1,7 +1,7 @@
 import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
-#from pip._vendor.distlib.resources import finder
+##from pip._vendor.distlib.resources import finder
 #from test.test_imageop import AAAAA
 #str1="ixgbe5: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 10\
 #	inet 10.110.16.101 netmask ffffff00 broadcast 10.110.16.255\
