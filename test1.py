@@ -1,3 +1,4 @@
+#!/bin/python
 import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
@@ -11,16 +12,31 @@ import subprocess,re,pprint,csv
 #print str1 
 
 
+
+
+def hextodec(shex):
+	netmask=[]
+	print "shex arg is " + shex
+	for cnt in range(0,7,2):
+		print "cnt is " + str(cnt)
+		print 'shex is ' + shex[cnt:(cnt+2)]
+		dec=int(shex[cnt:(cnt+2)],16)
+		print "dec is "+ str(dec)
+		#netmask += "." + str(dec)
+		netmask.append(str(dec))
+		#print "netmask hextodec "+ netmask
+	return '.'.join(netmask)
+hextodec('ffffffc0')
 def find_int(str1):
     
     intlist=[]    
     #Regex = re.compile(r'''
     #(ixgbe\d+).*inet\s*(\d+.\d+.\d+.\d+)\+s*netmask\s*(\w\w.\w\w.\w\w.\w\w).*
     #''',re.IGNORECASE | re.VERBOSE|re.DOTALL)
-    #(ixgbe|igb|lo)(\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{7}).*\n\s+ether\s+(\w\w:\w\w:\w\w:\w\w:\w\w:\w\w)
+    #(ixgbe|igb|lo)(\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w\w:\w\w:\w\w:\w\w:\w\w:\w\w)
     #''',re.IGNORECASE | re.VERBOSE)
     Regex = re.compile(r'''
-    (ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{7}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
+    (ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
     ''',re.IGNORECASE | re.VERBOSE)
 
     
@@ -31,9 +47,38 @@ def find_int(str1):
         for res in result:
         	#listtmp=[]
             ###if res[3].startswith(args[0]):
-            ###print "ip found " + res[0] + res[1] + res[2] + " " + res[3] + " " + res[4]
+            print "ip found " + res[0] + res[1] + res[2] + " " + res[3] + " " + res[4]
             listtmp=[]
-            listtmp=[res[0],res[1],res[2],res[3],res[4]]
+            netmask=hextodec(res[3])
+            print "netmask is "+ netmask
+            
+            
+            
+            print "res2 is " + res[2]
+            #ipall='u' + "'"+ res[2]+'/'+netmask + "'"
+            ipall= unicode(res[2]+'/'+netmask)
+            
+            print "ipall " + ipall
+            my_ip = ipaddress.ip_interface(u'100.110.120.130')
+            print "my ip " + str(my_ip)
+            
+            my_ip = ipaddress.ip_interface(ipall)
+           
+            print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)
+         
+            #my_ipIPv4Interface(u'10.220.192.194/29')
+            #From this you can obtain both the IP address and the IP network:
+            #my_ip.ip
+            #my_ip.network
+            #Pv4Network(u'10.220.192.192/29') 
+            
+            
+            
+            
+            
+            
+            
+            listtmp=[res[0],res[1],res[2],res[3],res[4],netmask]
             intlist.append(listtmp)
             #print "listtmp " + str(listtmp)
     return intlist
