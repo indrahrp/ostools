@@ -1,3 +1,5 @@
+#!/bin/python
+
 import getopt,sys,os,re
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
@@ -39,7 +41,7 @@ cmd_list_backup=[
             'dladm show-phys -L > ' + backupdir + 'dladmshowphysL',
             'dladm show-vnic > ' + backupdir + 'dladmshowvnic',
             'ifconfig -a > ' + backupdir + 'ifconfiga',
-            
+            'cp  /etc/gateways ' + backupdir,
             'netstat -nr > ' + backupdir + 'netstatnr.txt',
             'zfs list > ' + backupdir + 'zfslist.txt',
             'zpool status > ' + backupdir + 'zpoolstatus.txt',
@@ -120,12 +122,80 @@ cmd_list_backup=[
 
 cmd_list_restore=[
             'mkdir /etc/sysadmin && (mv /etc/inet/hosts /etc/inet/services /etc/sysadmin/;ln -s /etc/sysadmin/hosts /etc/inet/hosts;ln -s /etc/sysadmin/services /etc/inet/services)',
+            'cp ' + backupdir + 'system /etc/',
+            '(cp ' + backupdir + 'S68ndd /etc/rc2.d && chmod /etc/rc2.d/S68ndd)',
+            'cp ' + backupdir +'resolv.conf /etc/',
+            'cp ' + backupdir  + 'nsswitch.conf /etc/',
+            'cp ' + backupdir + 'zephyr.servers /etc/',
+            
+            "cat " + backupdir + "envlang.txt | awk '{print $3}' | xargs svccfg -s svc:/system/environment:init setprop environment/LANG = astring:",
+            'svcadm refresh svc:/system/environment:init',
+            "cat " + backupdir + "timezonelocaltime.txt |awk '{print $3}'| xargs  svccfg -s svc:/system/timezone:default setprop timezone/localtime= astring:",
+            'svcadm refresh svc:/system/timezone:default',
+            
             'cp ' + backupdir + 'hosts /etc/sysadmin/hosts',
             'cp ' + backupdir + 'services /etc/sysadmin/services',
+            
+             "(cd " + backupdir + "crontabs;for user in `ls |egrep -vi '(root|sys|adm|lp|snmp)'`;do  cp $user /var/spool/cron/crontabs;done)",
+            'cp ' + backupdir + 'sudoers /etc/',
+            'cp ' + backupdir + 'pkggetsudoers /usr/pkg/etc/',
+            'cp ' + backupdir + 'prodeng.conf /etc/',
+            
+            'cp ' + backupdir + 'profile /etc/',
+            'cp -r ' + backupdir + 'profile.d /etc/', 
+            'cp ' + backupdir + 'ssh/ssh_host* /etc/',
+            '(cp -r ' + backupdir + 'named /var/ && ln -s /var/named/named.conf /etc/named.conf)',
+          
+            'cp '+ backupdir + 'bps.sh /; chmod +x /bps.sh',
+            '(cd ' + backupdir + 'yp; find . -depth -print | cpio -pdumv /var/yp/)',
+        
+            'cp /kernel/drv/sd.conf /var/tmp/sd.conf.orig',
+            'cp /kernel/drv/ixgbe.conf /var/tmp/ixgbe.conf.orig',
+            'cp ' + backupdir + 'sd.conf /kernel/drv/',
+            'cp ' + backupdir + 'ixgbe.conf /kernel.drv/',
+        
+            
             'cp ' + backupdir + 'etc/ntp.keys /etc/ntp.keys /etc/' 
+            'cp ' + backupdir + 'ntpdir/etc/inet/* /etc/inet',
+            
+            'mkdir /etc/ntp;cp ' + backupdir + 'ntpdir/etc/ntp/* /etc/ntp',
+            
+        
             ]
-for cmd in cmd_list_backup:
-    exec_command(cmd)
+def backuphost():
+    for cmd in cmd_list_backup:
+        exec_command(cmd)
 
-for cmd in cmd_list_restore:
-    exec_command(cmd)
+def restorehost():
+    for cmd in cmd_list_restore:
+        exec_command(cmd)
+    
+    
+def usage():
+    print os.path.basename(sys.argv[0]) +  " -h for help "
+    print os.path.basename(sys.argv[0]) + " -B  to backup before OS Reinstall "
+    print os.path.basename(sys.argv[0]) + " -R  to restore from backup after OS reinstall"
+  
+    
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "BRh")
+    except getopt.GetoptError as err:
+        print str(err)
+        usage()
+
+    for o, a in opts:
+                if o == "-h":
+                        usage()
+                        sys.exit(0)
+
+                elif o == "-B":
+                    backuphost()
+
+                elif o == "-R":
+                    restorehost();
+
+if __name__ == "__main__":
+        main()  
+
+usage()
