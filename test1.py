@@ -26,7 +26,7 @@ def hextodec(shex):
 		netmask.append(str(dec))
 		#print "netmask hextodec "+ netmask
 	return '.'.join(netmask)
-hextodec('ffffffc0')
+
 def find_int(str1):
     
     intlist=[]    
@@ -66,13 +66,7 @@ def find_int(str1):
            
             print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)
          
-            #my_ipIPv4Interface(u'10.220.192.194/29')
-            #From this you can obtain both the IP address and the IP network:
-            #my_ip.ip
-            #my_ip.network
-            #Pv4Network(u'10.220.192.192/29') 
-            
-            
+                       
             
             
             
