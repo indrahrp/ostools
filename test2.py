@@ -114,7 +114,7 @@ cmd_list_backup=[
             
             
             'netstat -ni > ' + backupdir + 'netstatni.txt',
-            'ipadm > ' + backupdir + 'ipadm.txt']
+           ]
 
 
 
