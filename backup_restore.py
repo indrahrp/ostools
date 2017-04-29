@@ -201,8 +201,8 @@ cmd_list_nis=[
             'svcadm enable svc:/network/nis/client:default',
             'svcadm enable svc:/network/nis/server:default',
             'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
-            "echo '+::::::::' >> /etc/shadow",
-            "echo '+' >> /etc/passwd",
+            "grep '^+' /etc/shadow || echo '+::::::::' >> /etc/shadow",
+            "grep '^+' /etc/passwd || echo '+' >> /etc/passwd",
 
 
     
