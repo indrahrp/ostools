@@ -115,7 +115,7 @@ cmd_list_backup=[
 
             
             
-            'netstat -ni > ' + backupdir + 'netstatni.txt',
+            'netstat -ni > ' + backupdir + 'netstatni.txt'
            ]
 
 
@@ -150,8 +150,8 @@ cmd_list_restore=[
             'cp -p ' + backupdir + 'ssh/ssh_host* /etc/ssh/',
             '(cp -pr ' + backupdir + 'named /var/ && ln -s /var/named/named.conf /etc/named.conf)',
           
-            'cp -p '+ backupdir + 'bps.sh /; chmod +x /bps.sh',
-            '(cd ' + backupdir + 'yp; find . -depth -print | cpio -pdumv /var/yp/)',
+            'cp -p ' + backupdir + 'bps.sh /; chmod +x /bps.sh',
+            'cp -p ' + backupdir + 'yp/* /var/yp/',
         
             'cp -p /kernel/drv/sd.conf /var/tmp/sd.conf.orig',
             'cp -p /kernel/drv/ixgbe.conf /var/tmp/ixgbe.conf.orig',
