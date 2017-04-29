@@ -54,7 +54,7 @@ cmd_list_backup=[
             'date >  '+ backupdir + 'date.txt',
             'svccfg -s svc:/system/environment:init listprop environment/LANG > ' + backupdir + 'envlang.txt',
             'svccfg -s svc:/system/timezone:default listprop timezone/localtime > ' + backupdir + 'timezonelocaltime.txt',
-            
+            'svccfg -s system/environment:init listprop environment/TZ > ' + backupdir + 'environmentTZ.txt',
             'cp -p /etc/hosts ' + backupdir,
             'cp -p /etc/services ' + backupdir,   
 
@@ -130,6 +130,9 @@ cmd_list_restore=[
             'cp -p ' + backupdir + 'gateways /etc/',
             
             "cat " + backupdir + "envlang.txt | awk '{print $3}' | xargs svccfg -s svc:/system/environment:init setprop environment/LANG = astring:",
+            "cat " + backupdir + "environmentTZ.txt |awk '{print $3}'| xargs  svccfg -s system/environment:init setprop environment/TZ=",
+            'svcadm refresh svc:/system/timezone:default',
+        
             'svcadm refresh svc:/system/environment:init',
             "cat " + backupdir + "timezonelocaltime.txt |awk '{print $3}'| xargs  svccfg -s svc:/system/timezone:default setprop timezone/localtime= astring:",
             'svcadm refresh svc:/system/timezone:default',
@@ -148,7 +151,7 @@ cmd_list_restore=[
             '(cp -pr ' + backupdir + 'named /var/ && ln -s /var/named/named.conf /etc/named.conf)',
           
             'cp -p '+ backupdir + 'bps.sh /; chmod +x /bps.sh',
-            '(cd -p ' + backupdir + 'yp; find . -depth -print | cpio -pdumv /var/yp/)',
+            '(cd ' + backupdir + 'yp; find . -depth -print | cpio -pdumv /var/yp/)',
         
             'cp -p /kernel/drv/sd.conf /var/tmp/sd.conf.orig',
             'cp -p /kernel/drv/ixgbe.conf /var/tmp/ixgbe.conf.orig',
@@ -163,6 +166,70 @@ cmd_list_restore=[
             
         
             ]
+
+cmd_list_rest=[
+            'svcadm enable /network/dns/server',
+            'nscfg import -f dns/client',
+            'nscfg import -f name-service/switch',
+            'svcadm enable ntp',
+            'svccfg -s system/environment:init refresh',
+            'svcadm restart system/environment:init',
+            'zpool upgrade -a',
+            'zfs upgrade -a'
+
+    ]
+
+cmd_list_nis=[
+     
+            'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
+            'svcadm enable  svc:/network/nis/domain:default',
+            'svcadm enable /network/nis/client',
+            'pkg install service/network/nis'
+            'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
+
+            'svcadm disable svc:/network/nis/xfr:default',
+            'svcadm disable svc:/network/nis/update:default',
+            'svcadm disable svc:/network/nis/passwd:default',
+            'svcadm disable svc:/network/nis/domain:default',
+            'svcadm disable svc:/network/nis/client:default',
+            'svcadm disable svc:/network/nis/server:default',
+
+            'svcadm enable svc:/network/nis/xfr:default',
+            'svcadm enable svc:/network/nis/update:default',
+            'svcadm enable svc:/network/nis/passwd:default',
+            'svcadm enable svc:/network/nis/domain:default',
+            'svcadm enable svc:/network/nis/client:default',
+            'svcadm enable svc:/network/nis/server:default',
+            'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
+            "echo '+::::::::' >> /etc/shadow",
+            "echo '+' >> /etc/passwd",
+
+
+    
+    ]
+
+cmd_list_nfs=[
+    
+            'svcadm enable svc:/network/nfs/status:default svc:/network/nfs/nlockmgr:default svc:/network/nfs/mapid:default svc:/network/nfs/client:default svc:/network/nfs/rquota:default', 
+            'svcadm restart autofs',
+            'svcadm enable /system/name-service-cache'
+
+    ]
+
+
+def configure_nis(a):
+    exec_command('echo '+ a + ' > /etc/defaultdomain')
+    exec_command('domainname ' + a)
+    for cmd in cmd_list_nis:
+        exec_command(cmd)
+    
+def configure_nfs(a):
+    exec_command('sharectl set -p nfsmapid_domain=' + a + ' nfs')
+    for cmd in cmd_list_nfs:
+        exec_command(cmd)
+
+
+
 def backuphost():
     for cmd in cmd_list_backup:
         exec_command(cmd)
@@ -170,17 +237,24 @@ def backuphost():
 def restorehost():
     for cmd in cmd_list_restore:
         exec_command(cmd)
+        
+def restofcommand():
+     for cmd in cmd_list_rest:
+        exec_command(cmd)
+    
     
     
 def usage():
     print os.path.basename(sys.argv[0]) +  " -h for help "
     print os.path.basename(sys.argv[0]) + " -B  to backup before OS Reinstall "
     print os.path.basename(sys.argv[0]) + " -R  to restore from backup after OS reinstall"
-  
+    print os.path.basename(sys.argv[0]) + " -L  to run rest of command after OS reinstall"
+    print os.path.basename(sys.argv[0]) + " -N 'domain name' - to configure NIS after OS reinstall"
+    print os.path.basename(sys.argv[0]) + " -F 'domain name' - to configure NFS after OS reinstall"
     
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRh")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:h")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -189,12 +263,17 @@ def main():
                 if o == "-h":
                         usage()
                         sys.exit(0)
-
                 elif o == "-B":
                     backuphost()
-
                 elif o == "-R":
                     restorehost();
+                elif o == "-L":
+                    restofcommand();
+                elif o == "-N":
+                    configure_nis(a);
+                elif o == "-F":
+                    configure_nfs(a);
+                
 
 if __name__ == "__main__":
         main()  
