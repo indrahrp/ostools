@@ -7,7 +7,7 @@ import subprocess,re,pprint,csv
 backupdir='/var/tmp/pkgbck/'
 
 def exec_command(command):
-        print "execuing command " + command        
+        print "executing command :  " + command        
         #active_link=subprocess.Popen(['dladm','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         active_link=subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
@@ -153,10 +153,10 @@ cmd_list_restore=[
             'cp /kernel/drv/sd.conf /var/tmp/sd.conf.orig',
             'cp /kernel/drv/ixgbe.conf /var/tmp/ixgbe.conf.orig',
             'cp ' + backupdir + 'sd.conf /kernel/drv/',
-            'cp ' + backupdir + 'ixgbe.conf /kernel.drv/',
+            'cp ' + backupdir + 'ixgbe.conf /kernel/drv/',
         
             
-            'cp ' + backupdir + 'etc/ntp.keys /etc/ntp.keys /etc/' 
+            'cp ' + backupdir + 'etc/ntp.keys  /etc/',
             'cp ' + backupdir + 'ntpdir/etc/inet/* /etc/inet',
             
             'mkdir /etc/ntp;cp ' + backupdir + 'ntpdir/etc/ntp/* /etc/ntp',
