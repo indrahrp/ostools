@@ -45,7 +45,7 @@ cmd_list_backup=[
             'netstat -nr > ' + backupdir + 'netstatnr.txt',
             'zfs list > ' + backupdir + 'zfslist.txt',
             'zpool status > ' + backupdir + 'zpoolstatus.txt',
-            'zpool list > + ' + backupdir + 'zpoollist.txt',
+            'zpool list >  ' + backupdir + 'zpoollist.txt',
             'zfs get all > ' + backupdir + 'zfsgetall.txt',
             'zpool  get all gtplog > ' + 'zpoolgetallgtplog.txt',
             'zpool get all ilx > ' + 'zpoolgetallilx.txt',
@@ -84,7 +84,7 @@ cmd_list_backup=[
             'beadm list > ' + backupdir + 'beadmlist',
             
             
-            "(cd /var/spool/cron/crontabs && for user in `ls -tlr | awk '{print $9}'|grep -v ^$`;do  echo 'USER ' $user >> ' + backupdir + 'cronbck ; cat $user >> ' + backupdir + 'cronbck;done)",
+            "(cd /var/spool/cron/crontabs && for user in `ls -tlr | awk '{print $9}'|grep -v ^$`;do  echo 'USER ' $user >> ' + backupdir + 'cronbck ; cat $user >> " + backupdir + "cronbck;done)",
 
 
             
@@ -198,4 +198,3 @@ def main():
 if __name__ == "__main__":
         main()  
 
-usage()
