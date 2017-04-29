@@ -127,6 +127,7 @@ cmd_list_restore=[
             'cp ' + backupdir +'resolv.conf /etc/',
             'cp ' + backupdir  + 'nsswitch.conf /etc/',
             'cp ' + backupdir + 'zephyr.servers /etc/',
+            'cp ' + backupdir + 'gateways /etc/',
             
             "cat " + backupdir + "envlang.txt | awk '{print $3}' | xargs svccfg -s svc:/system/environment:init setprop environment/LANG = astring:",
             'svcadm refresh svc:/system/environment:init',
