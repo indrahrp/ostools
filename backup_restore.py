@@ -184,7 +184,7 @@ cmd_list_nis=[
             'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
             'svcadm enable  svc:/network/nis/domain:default',
             'svcadm enable /network/nis/client',
-            'pkg install service/network/nis'
+            'pkg install service/network/nis',
             'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
 
             'svcadm disable svc:/network/nis/xfr:default',
@@ -254,7 +254,7 @@ def usage():
     
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRLN:h")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:h")
     except getopt.GetoptError as err:
         print str(err)
         usage()
