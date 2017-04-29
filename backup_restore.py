@@ -151,7 +151,7 @@ cmd_list_restore=[
             '(cp -pr ' + backupdir + 'named /var/ && ln -s /var/named/named.conf /etc/named.conf)',
           
             'cp -p ' + backupdir + 'bps.sh /; chmod +x /bps.sh',
-            'cp -p ' + backupdir + 'yp/* /var/yp/',
+            'cp -rp ' + backupdir + 'yp/* /var/yp/',
         
             'cp -p /kernel/drv/sd.conf /var/tmp/sd.conf.orig',
             'cp -p /kernel/drv/ixgbe.conf /var/tmp/ixgbe.conf.orig',
