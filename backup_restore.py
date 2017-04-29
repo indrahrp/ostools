@@ -84,7 +84,7 @@ cmd_list_backup=[
             'beadm list > ' + backupdir + 'beadmlist',
             
             
-            "(cd /var/spool/cron/crontabs && for user in `ls -tlr | awk '{print $9}'|grep -v ^$`;do  echo 'USER ' $user >> ' + backupdir + 'cronbck ; cat $user >> " + backupdir + "cronbck;done)",
+            "(cd /var/spool/cron/crontabs && for user in `ls -tlr | awk '{print $9}'|grep -v ^$`;do  echo 'USER ' $user >> " + backupdir + "cronbck ; cat $user >> " + backupdir + "cronbck;done)",
 
 
             
