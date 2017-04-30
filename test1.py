@@ -2,16 +2,6 @@
 import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
-##from pip._vendor.distlib.resources import finder
-#from test.test_imageop import AAAAA
-#str1="ixgbe5: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 10\
-#	inet 10.110.16.101 netmask ffffff00 broadcast 10.110.16.255\
-#	ether 90:e2:ba:3e:d2:fd"
-
-#str1="ixgbe5: flags=1001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,FIXEDMTU> mtu 9000 index 10"
-#print str1 
-
-
 
 
 def hextodec(shex):
@@ -30,16 +20,10 @@ def hextodec(shex):
 def find_int(str1):
     
     intlist=[]    
-    #Regex = re.compile(r'''
-    #(ixgbe\d+).*inet\s*(\d+.\d+.\d+.\d+)\+s*netmask\s*(\w\w.\w\w.\w\w.\w\w).*
-    #''',re.IGNORECASE | re.VERBOSE|re.DOTALL)
-    #(ixgbe|igb|lo)(\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w\w:\w\w:\w\w:\w\w:\w\w:\w\w)
-    #''',re.IGNORECASE | re.VERBOSE)
     Regex = re.compile(r'''
     (ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
     ''',re.IGNORECASE | re.VERBOSE)
 
-    
     #print "sting ins" + str1
     result=Regex.findall(str1)
     print "result " + str(result)
@@ -50,10 +34,7 @@ def find_int(str1):
             print "ip found " + res[0] + res[1] + res[2] + " " + res[3] + " " + res[4]
             listtmp=[]
             netmask=hextodec(res[3])
-            print "netmask is "+ netmask
-            
-            
-            
+            print "netmask is "+ netmask            
             print "res2 is " + res[2]
             #ipall='u' + "'"+ res[2]+'/'+netmask + "'"
             ipall= unicode(res[2]+'/'+netmask)
@@ -61,17 +42,8 @@ def find_int(str1):
             print "ipall " + ipall
             my_ip = ipaddress.ip_interface(u'100.110.120.130')
             print "my ip " + str(my_ip)
-            
             my_ip = ipaddress.ip_interface(ipall)
-           
-            print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)
-         
-                       
-            
-            
-            
-            
-            
+            print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)            
             listtmp=[res[0],res[1],res[2],res[3],res[4],netmask]
             intlist.append(listtmp)
             #print "listtmp " + str(listtmp)
@@ -88,12 +60,9 @@ def dladm_showphys(phys):
                 for res in result:
 	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
 			phys.setdefault(res[0],{})
-			
 			phys[res[0]]['speed']=res[1]
 			phys[res[0]]['duplex']=res[2]
 			phys[res[0]]['device']=res[3]+res[4]
-
-
 
 def ipadm_setip(intlist):
         print "ipadm setting up  .."	
@@ -102,11 +71,9 @@ def ipadm_setip(intlist):
         	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	#lines=active_link.communicate()[0]
         	lines=active_link.communicate()
-        	
         	print "lines 1 is " + str(lines)
-        	
-        	active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/24',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        	
+        	##active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/24',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	print 'ipadm create-addr -T static -a' + str(int[2])+'/24'     	
         	lines=active_link.communicate()
         	print "lines 2 is " + str(lines)		
 		
@@ -118,30 +85,20 @@ def ReadSwitchConfigFromFile(Filename):
 ifconfiga=ReadSwitchConfigFromFile('ifconfiga')
 print "ifconfiga " + ifconfiga
 
+svrname='plantx1'
+
+hostfile=ReadSwitchConfigFromFile('hosts')
+print "hostfile is : " + hostfile
+for entry in hostfile.splitlines():
+	print "entry1 " + entry
+	for ent in entry.split(' '):
+		print "ent1 " + ent[1] + ' ent2 ' + ent[2]
+
+
+
 intl=find_int(ifconfiga)
 for int in intl:
 	print "int is " + str(int) +' \n'
-
-
-    
-#fh=open(r'C:\Python27\mine\network\showrun2800router.txt')
-
-#egex = re.compile(r'''
-#   interface\s?(Vlan|gigabitethernet|fastethernet)(\d+/?)+\s*
-#    ip address (\d+\.\d+\.\d+\.\d+\s+\d+\.\d+\.\d+\.\d+)
-#p\saddress\s+(\d+.\d+.\d+.\d+)\s*(\d+.\d+.\d+.\d+)?
-#'',re.IGNORECASE | re.VERBOSE|re.DOTALL)
-Regex = re.compile(r'''
-    (interface\s?)(Vlan|gigabitethernet|fastethernet)(\d+/?)+\s*
-    ip\saddress\s+(\d+.\d+.\d+.\d+)\s*(\d+.\d+.\d+.\d+)?
-    ''',re.IGNORECASE | re.VERBOSE|re.DOTALL)
-
-#result=Regex.findall(fh.read())
-
-#if result:
-#	for res in result:
-#           #if res[3].startswith(args[0]):
-#            print "ipsfound " + res[0] + res[1]+str(res[2])
 
 
 phys=OrderedDict()
@@ -167,12 +124,25 @@ for int in intl:
 print "after all " + str(intl)
 
 ipadm_setip(nintlist)
-#dladm_showphys_L(phys,physL)
 
-##print "phys"
-##print  phys
-##print "physL"
-##print  physL
+def usage():
+    print "xxxx "
 
-#find_slot_info(phys,physL,result)
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hq")
+    except getopt.GetoptError as err:
+        print str(err) 
+        usage()
+        sys.exit(2)
+    for o, a in opts:
+        if o == "-h":
+            usage()
+            sys.exit(0)
+        if o == "-q":
+            print "test"
+    
+if __name__ == "__main__":
+    main()
             

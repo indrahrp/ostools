@@ -1,7 +1,7 @@
 #!/bin/python
 
 import getopt,sys,os,re
-from collections import OrderedDict 
+#from collections import OrderedDict 
 import subprocess,re,pprint,csv
 
 backupdir='/var/tmp/pkgbck/'
@@ -50,7 +50,7 @@ cmd_list_backup=[
             'zpool  get all gtplog > ' + 'zpoolgetallgtplog.txt',
             'zpool get all ilx > ' + 'zpoolgetallilx.txt',
             'zpool get all rpool > ' + 'zpoolgetallrpool.txt',
-            'diskinfo -a  > ' + backupdir + 'diskinfo.txt',
+            'diskinfo   > ' + backupdir + 'diskinfo.txt',
             'date >  '+ backupdir + 'date.txt',
             'svccfg -s svc:/system/environment:init listprop environment/LANG > ' + backupdir + 'envlang.txt',
             'svccfg -s svc:/system/timezone:default listprop timezone/localtime > ' + backupdir + 'timezonelocaltime.txt',
