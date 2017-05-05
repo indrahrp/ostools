@@ -68,6 +68,8 @@ def ipadm_setip(intlist):
         print "ipadm setting up  .."	
         for int in	intlist:
         	print "ipadm assign to " + str(int)
+        	netname=hostdictip[int[5]]
+        	print "netname " + netname
         	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	#lines=active_link.communicate()[0]
         	lines=active_link.communicate()
@@ -86,15 +88,21 @@ ifconfiga=ReadSwitchConfigFromFile('ifconfiga')
 print "ifconfiga " + ifconfiga
 
 svrname='plantx1'
+hostipdict={}
 
 hostfile=ReadSwitchConfigFromFile('hosts')
-print "hostfile is : " + hostfile
-for entry in hostfile.splitlines():
-	print "entry1 " + entry
-	for ent in entry.split(' '):
-		print "ent1 " + ent[1] + ' ent2 ' + ent[2]
-
-
+#print "hostfile is : " + hostfile
+for entries in hostfile.splitlines():
+	#print "entry1 " + entry
+	hostiplist=[]
+	if svrname in entries:
+		print "entry " + str(entries)
+		ent=entries.split()
+		hostiplist=[ent[1]]		
+		hostipdict[str(ent[0])]=hostiplist
+		print "\n\n"
+			
+print "hostipdict "+  str(hostipdict)
 
 intl=find_int(ifconfiga)
 for int in intl:
