@@ -87,7 +87,8 @@ def ReadSwitchConfigFromFile(Filename):
 ifconfiga=ReadSwitchConfigFromFile('ifconfiga')
 print "ifconfiga " + ifconfiga
 
-svrname='plantx1'
+svrname='bunkerx1'
+domainname='tdn.pln.ilx.com'
 hostipdict={}
 
 hostfile=ReadSwitchConfigFromFile('hosts')
@@ -106,14 +107,13 @@ print "hostipdict "+  str(hostipdict)
 
 intl=find_int(ifconfiga)
 for int in intl:
-	print "int is " + str(int) +' \n'
+	netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
+
+	print "int is " + str(int) + ' with network name ' + netname
 
 
 phys=OrderedDict()
-physL=OrderedDict()
-result=OrderedDict()
-intfresult=OrderedDict()
-z2_detail=OrderedDict()
+
 dladm_showphys(phys)
 print "phys is " + str(phys)
 search_dev='e1000g0'

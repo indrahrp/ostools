@@ -1,13 +1,25 @@
-
-10.186.0.51     plantx1.tdn.pln.ilx.com plantx1 loghost
-10.186.10.54    plantx1.con.tdn.pln.ilx.com
-10.186.2.148    plantx1.dqa.tdn.pln.ilx.com
-10.186.4.43     plantx1.fepc.tdn.pln.ilx.com
-10.186.31.133   plantx1.n.p2p.tdn.pln.ilx.com
-10.186.31.134   dtpx1b.n.p2p.tdn.pln.ilx.com    dtpx1b
-10.186.5.82     plantx1.tpfun.tdn.pln.ilx.com
-10.186.0.40 bsdsrvx1.tdn.pln.ilx.com bsdsrvx1
+#
+# Internet host table
+#
+::1	localhost
+127.0.0.1	localhost
+#10.186.2.159	bunkerx1 loghost
+10.186.8.69	bunkerx1.arbix1.tdn.pln.ilx.com
+10.101.11.1	bunkerx1-bu.bkp.tdn.pln.ilx.com
+#0.0.0.0	bunkerx1.etga.tdn.pln.ilx.com
+#0.0.0.0	bunkerx1.etgb.tdn.pln.ilx.com
+199.119.58.12	bunkerx1.gcol.tdn.pln.ilx.com
+10.186.7.9	bunkerx1.gtdl.tdn.pln.ilx.com bunkerx1 loghost
+10.186.9.7	bunkerx1.log.tdn.pln.ilx.com
+10.186.30.4	bunkerx1.tsc1.tdn.pln.ilx.com
+10.186.30.68	bunkerx1.tsc2.tdn.pln.ilx.com
+10.110.15.101	bunkerx1.etga.tdn.pln.ilx.com
+10.110.16.101	bunkerx1.etgb.tdn.pln.ilx.com
+10.186.0.11	bsdsrvx1.dqa.tdn.pln.ilx.com 
+10.186.2.145	bsdsrvx1.dqa.tdn.pln.ilx.com 
+10.186.7.16	bsdsrvx1.gtdl.tdn.pln.ilx.com bsdsrvx1
+10.186.7.34	netsrvx1.gtdl.tdn.pln.ilx.com netsrvx1
+### Backup LAN
 10.101.1.204    nbumal1-bu bkp.tdn.pln.ilx.com
 10.101.1.206    nbumal2-bu bkp.tdn.pln.ilx.com
 10.101.1.207    nbumel1-bu bkp.tdn.pln.ilx.com
-10.101.11.50    plantx1-bu
