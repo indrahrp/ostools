@@ -99,8 +99,8 @@ for entries in hostfile.splitlines():
 	if svrname in entries:
 		print "entry " + str(entries)
 		ent=entries.split()
-		hostiplist=[ent[1]]		
-		hostipdict[str(ent[0])]=hostiplist
+		#hostiplist=[ent[1]]		
+		hostipdict[str(ent[0])]=ent[1]
 		print "\n\n"
 			
 print "hostipdict "+  str(hostipdict)
@@ -108,10 +108,9 @@ print "hostipdict "+  str(hostipdict)
 intl=find_int(ifconfiga)
 for int in intl:
 	netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
-
-	print "int is " + str(int) + ' with network name ' + netname
-
-
+	#print "int is " + str(int) + ' with network name ' + netname
+	int.append(netname)
+	print "int dengan netame " + str(int)
 phys=OrderedDict()
 
 dladm_showphys(phys)
@@ -135,6 +134,9 @@ ipadm_setip(nintlist)
 
 def usage():
     print "xxxx "
+
+#def validate():
+
 
 
 def main():
