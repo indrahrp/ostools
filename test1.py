@@ -119,7 +119,7 @@ phys=OrderedDict()
 dladm_showphys(phys)
 print "phys is " + str(phys)
 
-inttoconfigure()
+
 
 def inttoconfigure():
 
@@ -135,9 +135,11 @@ def inttoconfigure():
 				nintlist.append(int)
 				break
 				#print values['device']
-print "after all " + str(intl)
+	print "after all " + str(intl)
+	return nintlist
 
-ipadm_setip(nintlist)
+intforconfig=inttoconfigure()
+ipadm_setip(intforconfig)
 
 def usage():
     print "xxxx "
