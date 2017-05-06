@@ -121,7 +121,7 @@ cmd_list_backup=[
             'mkdir -p ' + backupdir + 'usr/lib/X11/app-defaults',
             '(cd  /usr/openwin/lib/app-defaults/ && cp -p * ' + backupdir + 'usr/openwin/lib/app-defaults/)',
             '(cd usr/lib/X11/app-defaults && cp -p * ' + backupdir + 'usr/lib/X11/app-defaults/)',
-            'cp -p/usr/lib/libsybdb* ' + backupdir + 'autosys/' 
+            'cp -p /usr/lib/libsybdb* ' + backupdir + 'autosys/' 
            ]
 
 
