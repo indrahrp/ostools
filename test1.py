@@ -140,6 +140,7 @@ def inttoconfigure():
 	return nintlist
 
 intforconfig=inttoconfigure()
+print "intforconfig is " + str(intforconfig)
 ipadm_setip(intforconfig)
 
 def usage():
