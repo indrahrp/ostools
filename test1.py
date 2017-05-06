@@ -131,12 +131,12 @@ def inttoconfigure():
 		for netname, values in phys.items():
 			if values['device'] == search_dev:
 				print "netname for " +  " search_dev is " + netname
-				intl
+			
 				int.append(netname)
 				nintlist.append(int)
 				break
 				#print values['device']
-	print "after all " + str(intl)
+	print "after all " + str(nintlist)
 	return nintlist
 
 intforconfig=inttoconfigure()
