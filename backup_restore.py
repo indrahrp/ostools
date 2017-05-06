@@ -115,12 +115,12 @@ cmd_list_backup=[
 
             
             
-            'netstat -ni > ' + backupdir + 'netstatni.txt'
-            'mkdir -p ' + backupdir + 'autosys'
+            'netstat -ni > ' + backupdir + 'netstatni.txt',
+            'mkdir -p ' + backupdir + 'autosys',
             'mkdir -p ' + backupdir + 'usr/openwin/lib/app-defaults/',
             'mkdir -p ' + backupdir + 'usr/lib/X11/app-defaults',
-            '(cd  /usr/openwin/lib/app-defaults/ && cp -p * ' + backupdir + 'usr/openwin/lib/app-defaults/',
-            '(cd usr/lib/X11/app-defaults && cp -p * ' + backupdir + 'usr/lib/X11/app-defaults/',
+            '(cd  /usr/openwin/lib/app-defaults/ && cp -p * ' + backupdir + 'usr/openwin/lib/app-defaults/)',
+            '(cd usr/lib/X11/app-defaults && cp -p * ' + backupdir + 'usr/lib/X11/app-defaults/)',
             'cp -p/usr/lib/libsybdb* ' + backupdir + 'autosys/' 
            ]
 
