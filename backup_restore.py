@@ -223,7 +223,7 @@ cmd_list_nfs=[
     ]
 
 cmd_list_rest_autosys=[
-            '[ ! -f /usr/lib/libsybdb.so ] && cp -p ' + backupdir + 'autosys/libsybdb.so] /usr/lib/'
+            '[ ! -f /usr/lib/libsybdb.so ] && cp -p ' + backupdir + 'autosys/libsybdb.so /usr/lib/'
             
             
         ]
