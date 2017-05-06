@@ -70,7 +70,7 @@ def ipadm_setip(intlist):
 		print "ipadm setting up  .."	
         
 		for int in	intlist:
-			print "ipadm assign to pertama " + int[7]
+			#print "ipadm assign to pertama " + int[7]
         	print "ipadm assign lagi to " + int[7]
         	#active_link=subprocess.Popen(['ipadm','create-ip',int[7]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	#lines=active_link.communicate()
