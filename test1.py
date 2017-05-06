@@ -70,7 +70,7 @@ def ipadm_setip(intlist):
 		print "ipadm setting up  .."	
         
 		for int in	intlist:
-			print "ipadm assign to " + str(int)
+			print "ipadm assign to pertama " + int[7]
         	#ipaddr=str(int[7]) + '/' + 
         	
         	print "ipadm assign lagi to " + int[7]
