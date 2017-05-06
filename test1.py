@@ -113,23 +113,28 @@ for int in intl:
 	#print "int is " + str(int) + ' with network name ' + netname
 	int.append(netname)
 	print "int dengan netame " + str(int)
+
 phys=OrderedDict()
 
 dladm_showphys(phys)
 print "phys is " + str(phys)
-search_dev='e1000g0'
-nintlist=[]
-for int in intl:
-	print "int for looking for netname is " + str(int) +' \n'
-	search_dev=int[0]
-	for netname, values in phys.items():
-		if values['device'] == search_dev:
-			print "netname for " +  " search_dev is " + netname
-			intl
-			int.append(netname)
-			nintlist.append(int)
-			break
-			#print values['device']
+
+inttoconfigure()
+
+def inttoconfigure():
+
+	nintlist=[]
+	for int in intl:
+		print "int for looking for netname is " + str(int) +' \n'
+		search_dev=int[0]
+		for netname, values in phys.items():
+			if values['device'] == search_dev:
+				print "netname for " +  " search_dev is " + netname
+				intl
+				int.append(netname)
+				nintlist.append(int)
+				break
+				#print values['device']
 print "after all " + str(intl)
 
 ipadm_setip(nintlist)
