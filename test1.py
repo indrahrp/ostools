@@ -65,16 +65,19 @@ def dladm_showphys(phys):
 			phys[res[0]]['device']=res[3]+res[4]
 
 def ipadm_setip(intlist):
-        print "ipadm setting up  .."	
-        for int in	intlist:
-        	print "ipadm assign to " + str(int)
-        	netname=hostdictip[int[5]]
-        	print "netname " + netname
-        	active_link=subprocess.Popen(['ipadm','create-ip',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+		prefix={'255.255.254.0':'23','255.255.255.0':'24','255.255.255.128':'25','255.255.255.192':'26','255.255.255.224':'27'}
+		print "ipadm setting up  .."	
+        
+		for int in	intlist:
+			print "ipadm assign to " + str(int)
+        	#ipaddr=str(int[7]) + '/' + 
+        	
+        	#active_link=subprocess.Popen(['ipadm','create-ip',int[7]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	#lines=active_link.communicate()[0]
-        	lines=active_link.communicate()
-        	print "lines 1 is " + str(lines)
-        	##active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/24',int[5]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        	#lines=active_link.communicate()
+        	#print "lines 1 is " + str(lines)
+        	active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/'+prefix[int[5]],int[7]+'/'+int[6]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         	print 'ipadm create-addr -T static -a' + str(int[2])+'/24'     	
         	lines=active_link.communicate()
         	print "lines 2 is " + str(lines)		
