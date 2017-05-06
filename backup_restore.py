@@ -222,6 +222,13 @@ cmd_list_nfs=[
 
     ]
 
+cmd_list_rest_autosys=[
+            '[ ! -f /usr/lib/libsybdb.so ] && cp -p ' + backupdir + 'autosys/libsybdb.so] /usr/lib/'
+            
+            
+        ]
+
+
 
 def configure_nis(a):
     exec_command('echo '+ a + ' > /etc/defaultdomain')
@@ -247,7 +254,10 @@ def restorehost():
 def restofcommand():
      for cmd in cmd_list_rest:
         exec_command(cmd)
-    
+
+def restoreautosys():
+     for cmd in cmd_list_rest_autosys:
+        exec_command(cmd)
     
     
 def usage():
@@ -257,10 +267,11 @@ def usage():
     print os.path.basename(sys.argv[0]) + " -L  to run rest of command after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -N 'domain name' - to configure NIS after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -F 'domain name' - to configure NFS after OS reinstall"
+    print os.path.basename(sys.argv[0]) + " -A to restore autosys files after OS reinstall"
     
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:h")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:Ah")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -279,6 +290,9 @@ def main():
                     configure_nis(a);
                 elif o == "-F":
                     configure_nfs(a);
+                elif o == "-A":
+                    restoreautosys();
+                
                 
 
 if __name__ == "__main__":
