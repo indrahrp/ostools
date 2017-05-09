@@ -45,12 +45,10 @@ def find_int(str1):
             print "my ip " + str(my_ip)
             my_ip = ipaddress.ip_interface(ipall)
             print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)            
-            listtmp=[res[0],res[1],res[2],res[3],res[4],netmask]
+            listtmp=[res[0],res[1],res[2],res[3],res[4],netmask,str(my_ip.network),str(my_ip.network.broadcast_address)]
             intlist.append(listtmp)
-            print "to verify " + str(my_ip.network.broadcast_address)
-            toverify.append(str(my_ip.network.broadcast_address))
-            #print "listtmp " + str(listtmp)
-    return intlist,toverify
+            
+    return intlist
 
 
 def dladm_showphys(phys):
@@ -109,7 +107,7 @@ for entries in hostfile.splitlines():
 			
 print "hostipdict "+  str(hostipdict)
 
-intl,toverify=find_int(ifconfiga)
+intl=find_int(ifconfiga)
 for int in intl:
 	netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
 	#print "int is " + str(int) + ' with network name ' + netname
