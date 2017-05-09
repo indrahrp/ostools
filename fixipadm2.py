@@ -72,11 +72,11 @@ def ipadm_setip(intlist):
         
 		for int in	intlist:
 			#print "ipadm assign to pertama " + int[7]
-			print "ipadm assign lagi to " + int[7]
+			print "ipadm assign lagi to " + int[9]
 			active_link=subprocess.Popen(['ipadm','create-ip',int[9]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			lines=active_link.communicate()
 			print "lines 1 error is " + lines[1]
-			active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/'+prefix[int[5]],int[9]+'/'+int[8]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a ',int[2]+'/'+prefix[int[5]],int[9]+'/'+int[8]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			print 'ipadm create-addr -T static -a' + str(int[2])+'/24'     	
 			lines=active_link.communicate()
 			print "lines 2 errro is " + lines[1]		
@@ -167,7 +167,7 @@ def pingbroadint(toverify):
 		ping_server(ipbroad,True,False)
 	
 	
-pingbroadint(toverify)	
+pingbroadint(intforconfig)	
 
 def usage():
     print "xxxx "
