@@ -169,7 +169,7 @@ def gatherinfo(svrname):
 
 	intforconfig=inttoconfigure(intl,phys)
 	print "intforconfig is " + str(intforconfig)
-
+	return intfoconfig
 
 
 #ipadm_setip(intforconfig)
