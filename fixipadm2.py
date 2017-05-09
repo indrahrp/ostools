@@ -125,13 +125,6 @@ def pingbroadint(toverify):
 		
 		print "\n\n pinging brodcast ip " + ip[8] + " " + ip[7]
 		ping_server(ip[7],True,False)
-	
-	
-
-def usage():
-    print "xxxx "
-
-#def validate():
 
 
 def gatherinfo(svrname):
@@ -178,11 +171,16 @@ def gatherinfo(svrname):
 #gatherinfo(svrname)
 #pingbroadint(intforconfig)	
 
+def usage():
+    print os.path.basename(sys.argv[0]) +  " -h for help "
+    print os.path.basename(sys.argv[0]) + " -A server name => to assign IP address to all server intefaces"
+    print os.path.basename(sys.argv[0]) + " -B server name => to verify all interface by pinging broadcast address  "
 
+#def validate():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "B:q")
+        opts, args = getopt.getopt(sys.argv[1:], "A:B:h")
     except getopt.GetoptError as err:
         print str(err) 
         usage()
@@ -194,6 +192,9 @@ def main():
         if o == "-B":
             broadcastip=gatherinfo(a)
     	    pingbroadint(broadcastip)
+    	if o == "-A":
+            inttoconfig=gatherinfo(a)
+    	    ipadm_setip(inttoconfig)
             
     
 if __name__ == "__main__":
