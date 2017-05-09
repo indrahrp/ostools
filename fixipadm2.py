@@ -169,7 +169,7 @@ def pingbroadint(toverify):
 		ping_server(ipbroad,True,False)
 	
 	
-	
+pingbroadint(toverify)	
 
 def usage():
     print "xxxx "
