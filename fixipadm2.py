@@ -161,7 +161,7 @@ def ping_server(serverIP,broadcast,linux):
         	print "ping to", serverIP, "failed!"
 				
 	
-
+print "to verify all " + str(toverify)
 
 def pingbroadint(toverify):
 	
