@@ -2,6 +2,7 @@
 import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
+from mine.checkhost import phys_detail
 
 
 def hextodec(shex):
@@ -83,7 +84,7 @@ def ReadFromFile(Filename):
 	return result
 
 
-def inttoconfigure(intl):
+def inttoconfigure(intl,phys):
 
 	nintlist=[]
 	for int in intl:
@@ -166,7 +167,7 @@ def gatherinfo(svrname):
 	print "phys is " + str(phys)
 
 
-	intforconfig=inttoconfigure(intl)
+	intforconfig=inttoconfigure(intl,phys)
 	print "intforconfig is " + str(intforconfig)
 
 
