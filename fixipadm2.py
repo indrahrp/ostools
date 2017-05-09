@@ -2,7 +2,7 @@
 import getopt,sys,os,re,ipaddress
 from collections import OrderedDict 
 import subprocess,re,pprint,csv
-from mine.checkhost import phys_detail
+#from mine.checkhost import phys_detail
 
 
 def hextodec(shex):
