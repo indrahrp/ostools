@@ -112,7 +112,8 @@ cmd_list_backup=[
             'biosconfig -get_bios_settings > ' + backupdir + 'bios_configbef.xml',
 
             'ubiosconfig export  all -x ' + backupdir + 'biosconfigbef.xml',
-
+            'cp -p /etc/inetd.conf ' + backupdir,
+            'inetadm > ' + backupdir + 'inetadm.txt',
             
             
             'netstat -ni > ' + backupdir + 'netstatni.txt',

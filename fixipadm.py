@@ -29,24 +29,17 @@ def find_int(str1):
     print "result " + str(result)
     if result:
         for res in result:
-        	#listtmp=[]
-            ###if res[3].startswith(args[0]):
-            print "ip found " + res[0] + res[1] + res[2] + " " + res[3] + " " + res[4]
+            #print "ip found " + res[0] + res[1] + res[2] + " " + res[3] + " " + res[4]
             listtmp=[]
             netmask=hextodec(res[3])
-            print "netmask is "+ netmask            
-            print "res2 is " + res[2]
-            #ipall='u' + "'"+ res[2]+'/'+netmask + "'"
             ipall= unicode(res[2]+'/'+netmask)
             
-            print "ipall " + ipall
             my_ip = ipaddress.ip_interface(u'100.110.120.130')
-            print "my ip " + str(my_ip)
             my_ip = ipaddress.ip_interface(ipall)
             print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)            
             listtmp=[res[0],res[1],res[2],res[3],res[4],netmask]
             intlist.append(listtmp)
-            #print "listtmp " + str(listtmp)
+            
     return intlist
 
 
@@ -80,12 +73,12 @@ def ipadm_setip(intlist):
 			lines=active_link.communicate()
 			print "lines 2 errro is " + lines[1]		
 		
-def ReadSwitchConfigFromFile(Filename):
+def ReadSwitchFromFile(Filename):
 	readfile=open(Filename,'r')
 	result=readfile.read()
 	return result
 
-ifconfiga=ReadSwitchConfigFromFile('ifconfiga')
+ifconfiga=ReadFromFile('ifconfiga')
 print "ifconfiga " + ifconfiga
 
 svrname='bunkerx1'
