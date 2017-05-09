@@ -47,6 +47,7 @@ def find_int(str1):
             print "my ip " + str(my_ip) + " network " + str(my_ip.network) + " broadcast " + str(my_ip.network.broadcast_address)            
             listtmp=[res[0],res[1],res[2],res[3],res[4],netmask]
             intlist.append(listtmp)
+            print "to verify " + str(my_ip.network.broadcast_address)
             toverify=str(my_ip.network.broadcast_address)
             #print "listtmp " + str(listtmp)
     return intlist,toverify
