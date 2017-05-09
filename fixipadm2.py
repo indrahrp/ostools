@@ -162,9 +162,10 @@ def ping_server(serverIP,broadcast,linux):
 
 def pingbroadint(toverify):
 	
-	for ipbroad in toverify:
-		print "pinging brodcast ip " + ipbroad
-		ping_server(ipbroad,True,False)
+	for ip in toverify:
+		
+		print "pinging brodcast ip " + ip[7]
+		ping_server(ip[7],True,False)
 	
 	
 pingbroadint(intforconfig)	
