@@ -164,7 +164,7 @@ def pingbroadint(toverify):
 	
 	for ip in toverify:
 		
-		print "pinging brodcast ip " + ip[8] + " " + ip[7]
+		print "\n\n pinging brodcast ip " + ip[8] + " " + ip[7]
 		ping_server(ip[7],True,False)
 	
 	
