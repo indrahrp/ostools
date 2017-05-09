@@ -83,7 +83,7 @@ def ReadFromFile(Filename):
 	return result
 
 
-def inttoconfigure():
+def inttoconfigure(intl):
 
 	nintlist=[]
 	for int in intl:
@@ -166,7 +166,7 @@ def gatherinfo(svrname):
 	print "phys is " + str(phys)
 
 
-	intforconfig=inttoconfigure()
+	intforconfig=inttoconfigure(intl)
 	print "intforconfig is " + str(intforconfig)
 
 
