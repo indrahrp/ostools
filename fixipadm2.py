@@ -148,7 +148,7 @@ def ping_server(serverIP,broadcast,linux):
     if broadcast and linux:
     	res = subprocess.call(['ping',serverIP,'-b','-s','40','-c','2'])
     elif broadcast and not linux:
-    	res = subprocess.call(['ping','-s',serverIP,'50','10'])
+    	res = subprocess.call(['ping','-s',serverIP,'50','3'])
     else:
     	res = subprocess.call(['ping',serverIP,' 3' ])
     	if res == 0:
