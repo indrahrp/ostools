@@ -94,7 +94,7 @@ domainname='tdn.pln.ilx.com'
 hostipdict={}
 
 hostfile=ReadSwitchConfigFromFile('hosts')
-#print "hostfile is : " + hostfile
+##print "hostfile is : " + hostfile
 for entries in hostfile.splitlines():
 	#print "entry1 " + entry
 	hostiplist=[]
