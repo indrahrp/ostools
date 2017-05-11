@@ -136,6 +136,9 @@ def gatherinfo(svrname):
 	hostipdict={}
 
 	hostfile=ReadFromFile('hosts')
+	
+	print "hostfile " + hostfile
+	
 	for entries in hostfile.splitlines():
 		hostiplist=[]
 		if svrname in entries:
