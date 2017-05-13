@@ -123,6 +123,10 @@ cmd_list_backup=[
             '(cd  /usr/openwin/lib/app-defaults/ && cp -p * ' + backupdir + 'usr/openwin/lib/app-defaults/)',
             '(cd usr/lib/X11/app-defaults && cp -p * ' + backupdir + 'usr/lib/X11/app-defaults/)',
             'cp -p /usr/lib/libsybdb* ' + backupdir + 'autosys/' 
+            
+            
+            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv' + backupdir + 'etcdir)'
+          
            ]
 
 
