@@ -125,7 +125,7 @@ cmd_list_backup=[
             'cp -p /usr/lib/libsybdb* ' + backupdir + 'autosys/',
             
             
-            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv' + backupdir + 'etcdir)'
+            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv ' + backupdir + 'etcdir)'
           
            ]
 
