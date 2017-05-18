@@ -152,8 +152,13 @@ def gatherinfo(svrname):
 
 	intl=find_int(ifconfiga)
 	for int in intl:
-		netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
-	#print "int is " + str(int) + ' with network name ' + netname
+	        outname=svrname+'.'+domainname	
+	        print "outname " + outname + " with hostipdict "+ str(hostipdict[int[2]]).strip()+ " with int " + int[2] 		
+                if str(hostipdict[int[2]]).strip() == outname.strip():
+	        	netname='out'		
+	        else:
+			netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
+			#print "int is " + str(int) + ' with network name ' + netname
 		int.append(netname)
 		print "int dengan netame " + str(int)
 
