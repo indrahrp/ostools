@@ -24,7 +24,7 @@ def find_int(str1):
     toverify=[]
     intlist=[]    
     Regex = re.compile(r'''
-    (ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
+    (nge\d+|nxge\d+|ixgbe\d+|igb\d+|e1000g\d+).*mtu\s+(\d+).*\n\s+inet\s+(\d+.\d+.\d+.\d+)\s+netmask\s+(\w{8}).*\n\s+ether\s+(\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2}:\w{1,2})
     ''',re.IGNORECASE | re.VERBOSE)
 
     result=Regex.findall(str1)
@@ -38,7 +38,7 @@ def find_int(str1):
             #print "res2 is " + res[2]
             ipall= unicode(res[2]+'/'+netmask)   
        	    #important inforrmation
-            print "ipall " + ipall
+            #print "ipall " + ipall
             my_ip = ipaddress.ip_interface(u'100.110.120.130')
             #print "my ip " + str(my_ip)
             my_ip = ipaddress.ip_interface(ipall)
@@ -54,27 +54,28 @@ def dladm_showphys(phys):
         active_link=subprocess.Popen(['dladm','show-phys'], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         lines=active_link.communicate()[0]
 	for line in lines.split('\n'):
-		interface_up=re.compile(r'(net[0-9]+).*up\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e|e1000g)([0-9]+)')
+		interface_up=re.compile(r'(net[0-9]+).*(up|unknown)\s+([0-9]{1,})\s+(\w+)\s+(ixgbe|igb|i40e|e1000g|nge|nxge)([0-9]+)')
                 result=interface_up.findall(line) 
                 for res in result:
-	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] )
+	    		print ('result in g0 :' + res[0]+ ' g1 ' + res[1] + ' g2 ' + res[2] + ' g3 ' + res[3] + ' g4 ' + res[4] + 'g5 ' + res[5])
 			phys.setdefault(res[0],{})
 			phys[res[0]]['speed']=res[1]
 			phys[res[0]]['duplex']=res[2]
-			phys[res[0]]['device']=res[3]+res[4]
-
+			phys[res[0]]['device']=res[4]+res[5]
+        print "phys is "+ str(phys)   
 def ipadm_setip(intlist):
 
-		prefix={'255.255.254.0':'23','255.255.255.0':'24','255.255.255.128':'25','255.255.255.192':'26','255.255.255.224':'27'}
+		prefix={'255.255.254.0':'23','255.255.255.0':'24','255.255.255.128':'25','255.255.255.192':'26','255.255.255.224':'27','255.255.255.252':'30'}
 		print "ipadm setting up  .."	
         
 		for int in	intlist:
-			print "ipadm assign lagi to " + int[9]
+			print "ipadm assign lagi to " + int[9] + " which part of " + str(int)
+			print "int 2 " + int[2] + ' int 5 ' + int[5] + ' int 9 ' + int[9] + ' int 8 ' + int[8] + " key " + prefix[int[5]]
 			active_link=subprocess.Popen(['ipadm','create-ip',int[9]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			lines=active_link.communicate()
 			print "lines 1 error is " + lines[1]
 			active_link=subprocess.Popen(['ipadm','create-addr','-T','static','-a',int[2]+'/'+prefix[int[5]],int[9]+'/'+int[8]], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			print 'ipadm create-addr -T static -a' + str(int[2])+'/24'     	
+			#print 'ipadm create-addr -T static -a' + str(int[2])+'/24'     	
 			lines=active_link.communicate()
 			print "lines 2 errro is " + lines[1]		
 		
@@ -91,13 +92,14 @@ def inttoconfigure(intl,phys):
 		print "int for looking for netname is " + str(int) +' \n'
 		search_dev=int[0]
 		for netname, values in phys.items():
+			print "net name nad valueddevice "+ str(netname) + " : " + str(values['device'])
 			if values['device'] == search_dev:
 				print "netname for " +  " search_dev is " + netname			
 				int.append(netname)
 				nintlist.append(int)
 				break
 			
-	print "after all " + str(nintlist)
+	#print "after all " + str(nintlist)
 	return nintlist
 
 
@@ -128,14 +130,14 @@ def pingbroadint(toverify):
 
 
 def gatherinfo(svrname):
-	ifconfiga=ReadFromFile('ifconfiga')
+	ifconfiga=ReadFromFile('/var/tmp/pkgbck/ifconfiga')
 	print "ifconfiga " + ifconfiga
 
 	#svrname=svrname
 	domainname='tdn.pln.ilx.com'
 	hostipdict={}
 
-	hostfile=ReadFromFile('hosts')
+	hostfile=ReadFromFile('/var/tmp/pkgbck/hosts')
 	
 	print "hostfile " + hostfile
 	
@@ -153,9 +155,9 @@ def gatherinfo(svrname):
 	intl=find_int(ifconfiga)
 	for int in intl:
 		netname=str(hostipdict[int[2]]).replace('.'+ domainname,"").replace(svrname + '.' ,"")
-	#print "int is " + str(int) + ' with network name ' + netname
+	        print "int is " + str(int) + ' with network name ' + netname
 		int.append(netname)
-		print "int dengan netame " + str(int)
+		#print "int dengan netame " + str(int)
 
 	phys=OrderedDict()
 
@@ -164,7 +166,7 @@ def gatherinfo(svrname):
 
 
 	intforconfig=inttoconfigure(intl,phys)
-	print "intforconfig is " + str(intforconfig)
+	#print "intforconfig is " + str(intforconfig)
 	return intforconfig
 
 

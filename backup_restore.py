@@ -179,6 +179,7 @@ cmd_list_restore=[
             ]
 
 cmd_list_rest=[
+            'svcadm restart ssh',
             'svcadm enable /network/dns/server',
             'nscfg import -f dns/client',
             'nscfg import -f name-service/switch',
@@ -187,6 +188,9 @@ cmd_list_rest=[
             'svcadm restart system/environment:init',
             'zpool upgrade -a',
             'zfs upgrade -a'
+            
+
+
 
     ]
 
@@ -233,7 +237,15 @@ cmd_list_rest_autosys=[
             
         ]
 
-
+cmd_list_publisher=[
+            'cp 127.0.0.1.OpsCenter_cert.pem /etc/certs/CA/',
+            'svcadm refresh  svc:/system/ca-certificates',
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ solaris",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ cacao",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ mp-re",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ opscenter",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ solarisstudio"
+    ]
 
 def configure_nis(a):
     exec_command('echo '+ a + ' > /etc/defaultdomain')
@@ -263,6 +275,10 @@ def restofcommand():
 def restoreautosys():
      for cmd in cmd_list_rest_autosys:
         exec_command(cmd)
+        
+def install_publisher():
+     for cmd in cmd_list_rest_autosys:
+        exec_command(cmd)
     
     
 def usage():
@@ -272,11 +288,12 @@ def usage():
     print os.path.basename(sys.argv[0]) + " -L  to run rest of command after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -N 'domain name' - to configure NIS after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -F 'domain name' - to configure NFS after OS reinstall"
+    print os.path.basename(sys.argv[0]) + " -P to install IPS Publisher after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -A to restore autosys files after OS reinstall"
     
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:Ah")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:AhP")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -297,7 +314,9 @@ def main():
                     configure_nfs(a);
                 elif o == "-A":
                     restoreautosys();
-                
+                elif o == "-P":
+                    install_publisher();
+            
                 
 
 if __name__ == "__main__":
