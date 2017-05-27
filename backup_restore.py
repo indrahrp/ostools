@@ -285,9 +285,9 @@ def install_publisher():
         exec_command(cmd)
     
 def set_lang(env):
-    exec_command("svccfg -s svc:/system/environment:init setprop environment/LANG = astring:"+env[0])
+    exec_command("svccfg -s svc:/system/environment:init setprop environment/LANG ="+env[0])
     exec_command("svccfg -s system/environment:init setprop environment/TZ="+env[1])
-    exec_command("svccfg -s svc:/system/timezone:default setprop timezone/localtime= astring:"+env[2])
+    exec_command("svccfg -s svc:/system/timezone:default setprop timezone/localtime="+env[2])
     exec_command('svcadm refresh svc:/system/timezone:default')
     exec_command('svcadm refresh svc:/system/environment:init')
           
