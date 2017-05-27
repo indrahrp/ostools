@@ -54,6 +54,7 @@ cmd_list_backup=[
             'date >  '+ backupdir + 'date.txt',
             'svccfg -s svc:/system/environment:init listprop environment/LANG > ' + backupdir + 'envlang.txt',
             'svccfg -s svc:/system/timezone:default listprop timezone/localtime > ' + backupdir + 'timezonelocaltime.txt',
+            'svccfg -s system/environment:init listprop environment/TZ  > ' + backupdir + 'envTZ.txt',
             'svccfg -s system/environment:init listprop environment/TZ > ' + backupdir + 'environmentTZ.txt',
             'cp -p /etc/hosts ' + backupdir,
             'cp -p /etc/services ' + backupdir,   
@@ -125,7 +126,8 @@ cmd_list_backup=[
             'cp -p /usr/lib/libsybdb* ' + backupdir + 'autosys/',
             
             
-            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv ' + backupdir + 'etcdir)'
+            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv ' + backupdir + 'etcdir)',
+            'cp -ip /root/.ssh/authorized_keys '+ backupdir
           
            ]
 
@@ -139,6 +141,7 @@ cmd_list_restore=[
             'cp -p ' + backupdir  + 'nsswitch.conf /etc/',
             'cp -p ' + backupdir + 'zephyr.servers /etc/',
             'cp -p ' + backupdir + 'gateways /etc/',
+            'cp -p ' + backupdir + 'authorized_keys /root/.ssh',
             
             "cat " + backupdir + "envlang.txt | awk '{print $3}' | xargs svccfg -s svc:/system/environment:init setprop environment/LANG = astring:",
             "cat " + backupdir + "environmentTZ.txt |awk '{print $3}'| xargs  svccfg -s system/environment:init setprop environment/TZ=",
@@ -187,13 +190,14 @@ cmd_list_rest=[
             'svccfg -s system/environment:init refresh',
             'svcadm restart system/environment:init',
             'zpool upgrade -a',
-            'zfs upgrade -a'
+            'zfs upgrade -a',
+            'pkg install developer/gnu'
             
 
 
 
     ]
-
+            
 cmd_list_nis=[
      
             'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
