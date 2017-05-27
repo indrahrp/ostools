@@ -284,7 +284,13 @@ def install_publisher():
      for cmd in cmd_list_rest_autosys:
         exec_command(cmd)
     
-    
+def set_lang(env):
+    exec_command("svccfg -s svc:/system/environment:init setprop environment/LANG = astring:"+env[0])
+    exec_command("svccfg -s system/environment:init setprop environment/TZ="+env[1])
+    exec_command("svccfg -s svc:/system/timezone:default setprop timezone/localtime= astring:"+env[2])
+    exec_command('svcadm refresh svc:/system/timezone:default')
+    exec_command('svcadm refresh svc:/system/environment:init')
+          
 def usage():
     print os.path.basename(sys.argv[0]) +  " -h for help "
     print os.path.basename(sys.argv[0]) + " -B  to backup before OS Reinstall "
@@ -292,12 +298,14 @@ def usage():
     print os.path.basename(sys.argv[0]) + " -L  to run rest of command after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -N 'domain name' - to configure NIS after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -F 'domain name' - to configure NFS after OS reinstall"
+    print os.path.basename(sys.argv[0]) + " -G 'lang,envtz,tzlocaltime' - to set lang,environment/TZ,timezone/localtime"  
     print os.path.basename(sys.argv[0]) + " -P to install IPS Publisher after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -A to restore autosys files after OS reinstall"
     
+    
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:AhP")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:AhPG:")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -316,6 +324,9 @@ def main():
                     configure_nis(a);
                 elif o == "-F":
                     configure_nfs(a);
+                elif o == "-G":
+                    env=a.split(',')
+                    setlang(env);
                 elif o == "-A":
                     restoreautosys();
                 elif o == "-P":
