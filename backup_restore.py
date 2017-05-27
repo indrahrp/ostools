@@ -326,7 +326,7 @@ def main():
                     configure_nfs(a);
                 elif o == "-G":
                     env=a.split(',')
-                    setlang(env);
+                    set_lang(env);
                 elif o == "-A":
                     restoreautosys();
                 elif o == "-P":
