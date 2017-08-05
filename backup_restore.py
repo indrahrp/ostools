@@ -20,6 +20,9 @@ cmd_list_backup=[
             'mkdir -p ' + backupdir + 'usr/pkg',
             'mkdir -p ' + backupdir + 'var/db',
             'mkdir -p ' + backupdir + 'var/bbmon',
+            'mkdir -p ' + backupdir + 'usr/pkg32',
+            'mkdir -p ' + backupdir + 'usr/pkg64',
+            
             '(cd /usr/pkg && find . -depth -print | cpio -pdumv ' + backupdir + 'usr/pkg)',   
             '(cd /usr/local && find . -depth -print | cpio -pdumv ' + backupdir + 'usr/local)',
             '(cd /var/db && find . -depth -print | cpio -pdumv ' + backupdir + 'var/db)',
