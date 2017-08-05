@@ -24,10 +24,7 @@ cmd_list_backup=[
             '(cd /usr/local && find . -depth -print | cpio -pdumv ' + backupdir + 'usr/local)',
             '(cd /var/db && find . -depth -print | cpio -pdumv ' + backupdir + 'var/db)',
             '(cd /var/bbmon &&  find . -depth -print | cpio -pdumv ' + backupdir + 'var/bbmon)',
-            '(cd /usr/pkg32 && find . -depth -print | cpio -pdumv ' + backupdir + 'usr/pkg32)',
-            '(cd /usr/pkg64 && find . -depth -print | cpio -pdumv ' + backupdir + 'usr/pkg64)',  
             '/usr/pkg/sbin/pkg_info > ' + backupdir + 'pkginfoall.txt',
-            '/usr/pkg64/sbin/pkg_info > ' + backupdir + 'pkginfo64all.txt',
             'tar cvf ' + backupdir + 'opt.tar /opt',
             'format > ' + backupdir + 'format.txt 0</dev/null',
             
@@ -57,7 +54,6 @@ cmd_list_backup=[
             'date >  '+ backupdir + 'date.txt',
             'svccfg -s svc:/system/environment:init listprop environment/LANG > ' + backupdir + 'envlang.txt',
             'svccfg -s svc:/system/timezone:default listprop timezone/localtime > ' + backupdir + 'timezonelocaltime.txt',
-            'svccfg -s system/environment:init listprop environment/TZ  > ' + backupdir + 'envTZ.txt',
             'svccfg -s system/environment:init listprop environment/TZ > ' + backupdir + 'environmentTZ.txt',
             'cp -p /etc/hosts ' + backupdir,
             'cp -p /etc/services ' + backupdir,   
@@ -129,9 +125,7 @@ cmd_list_backup=[
             'cp -p /usr/lib/libsybdb* ' + backupdir + 'autosys/',
             
             
-            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv ' + backupdir + 'etcdir)',
-            'cp -ip /root/.ssh/authorized_keys '+ backupdir,
-            'ps -edf > ' + backupdir + 'psedf.out'
+            '(mkdir -p ' + backupdir + 'etcdir ; cd /etc/ && find . -depth -print |cpio -pdumv ' + backupdir + 'etcdir)'
           
            ]
 
@@ -145,7 +139,6 @@ cmd_list_restore=[
             'cp -p ' + backupdir  + 'nsswitch.conf /etc/',
             'cp -p ' + backupdir + 'zephyr.servers /etc/',
             'cp -p ' + backupdir + 'gateways /etc/',
-            '(mkdir /root/.ssh/;chmod 600 /root/.ssh/;cp -p ' + backupdir + 'authorized_keys /root/.ssh/)',
             
             "cat " + backupdir + "envlang.txt | awk '{print $3}' | xargs svccfg -s svc:/system/environment:init setprop environment/LANG = astring:",
             "cat " + backupdir + "environmentTZ.txt |awk '{print $3}'| xargs  svccfg -s system/environment:init setprop environment/TZ=",
@@ -194,16 +187,13 @@ cmd_list_rest=[
             'svccfg -s system/environment:init refresh',
             'svcadm restart system/environment:init',
             'zpool upgrade -a',
-            'zfs upgrade -a',
-            'svcadm enable svc:/system/name-service-cache:default',
-            'pkg install developer/gnu',
-            'pkg install pkg:/service/network/dns/bind'
+            'zfs upgrade -a'
             
 
 
 
     ]
-            
+
 cmd_list_nis=[
      
             'nscfg import -f /network/nis/domain; svcadm restart nis/domain',
@@ -250,11 +240,11 @@ cmd_list_rest_autosys=[
 cmd_list_publisher=[
             'cp 127.0.0.1.OpsCenter_cert.pem /etc/certs/CA/',
             'svcadm refresh  svc:/system/ca-certificates',
-            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx2:8002/IPS/ solaris",
-            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx2:8002/IPS/ cacao",
-            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx2:8002/IPS/ mp-re",
-            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx2:8002/IPS/ opscenter",
-            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx2:8002/IPS/ solarisstudio"
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ solaris",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ cacao",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ mp-re",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ opscenter",
+            "pkg set-publisher -G'*' -g https://oracle-oem-oc-mgmt-boxerx1:8002/IPS/ solarisstudio"
     ]
 
 def configure_nis(a):
@@ -287,16 +277,10 @@ def restoreautosys():
         exec_command(cmd)
         
 def install_publisher():
-     for cmd in cmd_list_publisher:
+     for cmd in cmd_list_rest_autosys:
         exec_command(cmd)
     
-def set_lang(env):
-    exec_command("svccfg -s svc:/system/environment:init setprop environment/LANG ="+env[0])
-    exec_command("svccfg -s system/environment:init setprop environment/TZ="+env[1])
-    exec_command("svccfg -s svc:/system/timezone:default setprop timezone/localtime="+env[2])
-    exec_command('svcadm refresh svc:/system/timezone:default')
-    exec_command('svcadm refresh svc:/system/environment:init')
-          
+    
 def usage():
     print os.path.basename(sys.argv[0]) +  " -h for help "
     print os.path.basename(sys.argv[0]) + " -B  to backup before OS Reinstall "
@@ -304,14 +288,12 @@ def usage():
     print os.path.basename(sys.argv[0]) + " -L  to run rest of command after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -N 'domain name' - to configure NIS after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -F 'domain name' - to configure NFS after OS reinstall"
-    print os.path.basename(sys.argv[0]) + " -G 'lang,envtz,tzlocaltime' - to set lang,environment/TZ,timezone/localtime"  
     print os.path.basename(sys.argv[0]) + " -P to install IPS Publisher after OS reinstall"
     print os.path.basename(sys.argv[0]) + " -A to restore autosys files after OS reinstall"
     
-    
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:AhPG:")
+        opts, args = getopt.getopt(sys.argv[1:], "BRLN:F:AhP")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -330,9 +312,6 @@ def main():
                     configure_nis(a);
                 elif o == "-F":
                     configure_nfs(a);
-                elif o == "-G":
-                    env=a.split(',')
-                    set_lang(env);
                 elif o == "-A":
                     restoreautosys();
                 elif o == "-P":
