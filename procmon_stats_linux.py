@@ -7,8 +7,12 @@ import datetime,getopt
 
 #fd=open("c:\\temp\\testfile",'r')
 #fd=open("C:\Users\uc205955\Downloads\sysinfo.fri",'r')
-fd=open("C:\Users\uc205955\Downloads\sysinfo.thu",'r')
-#fd=open("C:\\temp\\sysinfo.wed")
+#fd=open("C:\Users\uc205955\Downloads\sysinfo.thu",'r')
+
+#fd=open("C:\\temp\\temp\sysinfo_tkz2_wed")
+#fd=open("c:\\temp\\temp\\sysinfo.tickz2real.fri")
+fd=open("C:\\temp\\temp\sysinfo.ticksz1.thu")
+
 
 
 #    print line
@@ -22,7 +26,7 @@ def find_cpu(fd):
     i=0
     for line in fd:
         intlist=[]    
-        print line
+        #print line
         Regex = re.compile(r'''
         (\d+)\s+(\d{1,2})\s+(\d+\.\d+)\s+
         (\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+
@@ -35,10 +39,11 @@ def find_cpu(fd):
     #print str2
     #print "result " + str(result)
         if result:
-            if float(result.group(11)) <= 90 :
+            if float(result.group(11)) <= 60 :
                 tstamp=float(result.group(1))
                 ctime=datetime.datetime.fromtimestamp(tstamp).strftime('%c')
                 #print result.group(2,11)
+                print result.group(0)
                 #print result.group(2)
                 print  ctime + "  " + result.group(2) + " " + result.group(11)
                 i=i+1
@@ -53,8 +58,8 @@ def find_nicstat(fd):
     i=0
     for line in fd:
         Regex = re.compile(r'''
-        (\d+)\s+(\d+):(\w+):(\d+\.\d+):
-        (\d+\.\d+):(\d+\.\d+)\:(\d+\.\d+):
+        (\d+)\s+(\d+):(\w+|\w+.\d+):(\d+\.\d+):
+        (\d+\.\d+):(\d+.\d+)\:(\d+\.\d+):
         (\d+\.\d+):(\d+\.\d+):(\d+\.\d+):
         (\d+\.\d+):(\d+\.\d+) 
         ''',re.IGNORECASE | re.VERBOSE )
@@ -67,7 +72,7 @@ def find_nicstat(fd):
             #if float(result.group(5)) > 5300 and result.group(3).strip() == 'p3p1':
             #if result.group(3).strip() == 'p3p1':
             
-            if float(result.group(4)) > 2000:
+            if float(result.group(4)) > 1000:
             
                 tstamp=float(result.group(1))
                 ctime=datetime.datetime.fromtimestamp(tstamp).strftime('%c')
@@ -98,7 +103,11 @@ def find_iostat(fd):
         #print str2
         result=Regex.search(line)        
         if result:
-            if float(result.group(12)) > 2 :
+            #print " Device:          rrqm/s   wrqm/s     r/s     w/s   rsec/s   wsec/s avgrq-sz avgqu-sz   await  svctm  %util"
+            #print "sdb               0.00     0.00    0.00    0.00     0.01     0.01    13.75     0.00    5.29   5.27   0.00"
+            #print result.group(0)
+            #print "result " + result.group(0)
+            if float(result.group(12)) > 10 :
                 tstamp=float(result.group(1))
                 ctime=datetime.datetime.fromtimestamp(tstamp).strftime('%c')
                 #print result.group(2,11)
@@ -108,10 +117,10 @@ def find_iostat(fd):
 
 
 
-#find_iostat(fd)
+find_iostat(fd)
 
 
-find_cpu(fd)
+#find_cpu(fd)
 #find_nicstat(fd)
 
 def usage():
