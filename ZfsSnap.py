@@ -57,9 +57,9 @@ def main():
                 if o == "-h":
                         usage()
                         sys.exit(0)
-                if o == "S":
+                if o == "-S":
                     zfsvol=a
-                if o == "D":
+                if o == "-D":
                     keep=a
                 else:
                     print " incorrect option "
