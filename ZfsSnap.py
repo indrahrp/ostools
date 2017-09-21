@@ -57,6 +57,10 @@ def main():
                     zfsvol=a
                 if o == "D":
                     keep=a
+                else:
+                    print " incorrect option "
+                    sys.exit(0)
+    print "zfs vol " + zfsvol + " and keep " + keep
     if zfsvol and keep:                
         snap_suffix(zfsvol)
     
