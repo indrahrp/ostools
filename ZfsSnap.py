@@ -10,7 +10,7 @@ backupdir='/var/tmp/pkgbck/'
 
 def snap_suffix(zfsvol):
     tm=time.localtime()
-    suffix=str(tm.tm_year) +'_' + str(tm.tm_mon) + '_' +  str(tm.tm_mday) + '_' + str(tm.tm_hour) + '_'+  str(tm.tm_min) + '_' + str(tm_sec)
+    suffix=str(tm.tm_year) +'_' + str(tm.tm_mon) + '_' +  str(tm.tm_mday) + '_' + str(tm.tm_hour) + '_'+  str(tm.tm_min) + '_' + str(tm.tm_sec)
     print 'suffix ' + suffix
     
 def exec_command(command):
