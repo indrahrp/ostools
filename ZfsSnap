@@ -33,7 +33,7 @@ def usage():
     
 def main():
     try:
-        opts = getopt.getopt(sys.argv[1:], "SD:")
+        opts = getopt.getopt(sys.argv[1:], "SD:h")
     except getopt.GetoptError as err:
         print str(err)
         usage()
