@@ -53,6 +53,7 @@ def main():
         usage()
               
     for o,a in opts:
+                print ' o is ' + o
                 if o == "-h":
                         usage()
                         sys.exit(0)
