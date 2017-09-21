@@ -10,7 +10,7 @@ backupdir='/var/tmp/pkgbck/'
 
 def snap_suffix(zfsvol):
     tm=time.localtime()
-    suffix=tm.tm_year +'_' + tm.tm_mon + '_' +  tm.tm_mday + '_' + tm.tm_hour + '_'+  tm.tm_min + '_' + tm_sec
+    suffix=str(tm.tm_year) +'_' + str(tm.tm_mon) + '_' +  str(tm.tm_mday) + '_' + str(tm.tm_hour) + '_'+  str(tm.tm_min) + '_' + str(tm_sec)
     print 'suffix ' + suffix
     
 def exec_command(command):
@@ -64,7 +64,7 @@ def main():
                 else:
                     print " incorrect option "
                     sys.exit(0)
-    print "zfs vol " + zfsvol + " and keep " + keep
+    #print "zfs vol " + zfsvol + " and keep " + keep
     if zfsvol and keep:                
         snap_suffix(zfsvol)
     
