@@ -37,7 +37,7 @@ def main():
     except getopt.GetoptError as err:
         print str(err)
         usage()
-
+        
     for o, a in opts:
                 if o == "-h":
                         usage()
