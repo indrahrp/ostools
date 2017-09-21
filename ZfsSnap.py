@@ -12,6 +12,11 @@ def snap_suffix(zfsvol):
     tm=time.localtime()
     suffix=str(tm.tm_year) +'_' + str(tm.tm_mon) + '_' +  str(tm.tm_mday) + '_' + str(tm.tm_hour) + '_'+  str(tm.tm_min) + '_' + str(tm.tm_sec)
     print 'suffix ' + suffix
+
+def del_old_snapshot(zfsvol):
+    command = 'zfs list -t ' + zfsvol
+    old_snapshot=exec_command(command)
+    print "old _snapshot " + old_snapshot
     
 def exec_command(command):
         print "executing command :  " + command        
@@ -19,15 +24,11 @@ def exec_command(command):
         lines=active_link.communicate()
         print "Output " + lines[0]
         print "Error " + lines[1]
-        
+        return lines[0]
         
 
 cmd_list_zfs_snapshot=[
-            
-            ''
-            'svcadm enable svc:/network/nfs/status:default svc:/network/nfs/nlockmgr:default svc:/network/nfs/mapid:default svc:/network/nfs/client:default svc:/network/nfs/rquota:default', 
-            'svcadm restart autofs',
-            'svcadm enable /system/name-service-cache'
+            'zfs snapshot + svcadm enable /system/name-service-cache'
     ]
 
         
@@ -66,7 +67,9 @@ def main():
                     sys.exit(0)
     #print "zfs vol " + zfsvol + " and keep " + keep
     if zfsvol and keep:                
-        snap_suffix(zfsvol)
+        suffix=snap_suffix(zfsvol)
+        del_old_snapshot(zfsvol)
+        
     
     
 
