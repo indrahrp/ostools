@@ -47,8 +47,8 @@ def main():
     except getopt.GetoptError as err:
         print str(err)
         usage()
-    zfsvol=none
-    keep=none          
+    zfsvol=None
+    keep=None          
     for o,a in opts:
                 if o == "-h":
                         usage()
