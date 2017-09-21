@@ -1,10 +1,17 @@
 #!/bin/env python
 
 import getopt,sys,os,re
-import subprocess,re,pprint,csv
+import subprocess,re,pprint,csv,time
+
 
 backupdir='/var/tmp/pkgbck/'
 
+
+def snap_suffix(zfsvol):
+    tm=time.localtime()
+    suffix=tm.tm_year +'_' + tm.tm_mon + '_' +  tm.tm_mday + '_' + tm.tm_hour + '_'+  tm.tm_min + '_' + tm_sec
+    print 'suffix ' + suffix
+    
 def exec_command(command):
         print "executing command :  " + command        
         active_link=subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -12,9 +19,11 @@ def exec_command(command):
         print "Output " + lines[0]
         print "Error " + lines[1]
         
+        
 
 cmd_list_zfs_snapshot=[
-    
+            
+            ''
             'svcadm enable svc:/network/nfs/status:default svc:/network/nfs/nlockmgr:default svc:/network/nfs/mapid:default svc:/network/nfs/client:default svc:/network/nfs/rquota:default', 
             'svcadm restart autofs',
             'svcadm enable /system/name-service-cache'
@@ -47,9 +56,11 @@ def main():
                 if o == "D":
                     keep=a
                 else:
-                    usage()
+                    return -1
                     
-                
+    snap_suffix(zfsvol)
+    
+    
 
 if __name__ == "__main__":
         main()  
