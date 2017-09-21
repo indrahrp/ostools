@@ -44,7 +44,8 @@ def usage():
 def main():
     zfsvol=None
     keep=None
-    opts,args=None
+    opts=None
+    args=None
     try:
         opts, args = getopt.getopt(sys.argv[1:], "S:D:h")
     except getopt.GetoptError as err:
