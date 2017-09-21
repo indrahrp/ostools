@@ -2,6 +2,7 @@
 
 import getopt,sys,os,re
 import subprocess,re,pprint,csv,time
+from numpy.distutils.fcompiler import none
 
 
 backupdir='/var/tmp/pkgbck/'
@@ -46,7 +47,8 @@ def main():
     except getopt.GetoptError as err:
         print str(err)
         usage()
-                
+    zfsval=none
+    keep=none          
     for o,a in opts:
                 if o == "-h":
                         usage()
