@@ -57,10 +57,8 @@ def main():
                     zfsvol=a
                 if o == "D":
                     keep=a
-                else:
-                    return -1
-                    
-    snap_suffix(zfsvol)
+    if zfsvol and keep:                
+        snap_suffix(zfsvol)
     
     
 
