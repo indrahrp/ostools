@@ -46,7 +46,7 @@ def creds():
     ##print '\n Please enter root password of SP:\n'
     ##passenter = getpass.getpass(' Enter Password: ')
     ##password.append(passenter)
-    password = ['S;N;$teR','changeme']
+    password = ['XXX','changeme']
 
 
 
