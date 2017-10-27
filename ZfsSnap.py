@@ -129,7 +129,7 @@ def usage():
     """ for print help """
     print os.path.basename(sys.argv[0]) +  " -h for help "
     print os.path.basename(sys.argv[0]) + " -S zfs volume  -D number of snapshot to keep"
-    print "\nFor example : " + os.path.basename(sys.argv[0]) + " -S home/packages -D 4 "
+    print "For example : " + os.path.basename(sys.argv[0]) + " -S home/packages -D 4 "
     
     
 def main():

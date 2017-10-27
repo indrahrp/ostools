@@ -11,7 +11,7 @@ from time import ctime
 #fd=open("C:\Users\uc205955\Downloads\sysinfo.fri",'r')
 #fd=open("C:\Users\uc205955\Downloads\sysinfo.thu",'r')
 #fd=open("C:\\temp\\temp\\sysinfo.tue.itfpecz2b")
-fd=open("C:\\temp\\temp\\sysinfo.wed.vabdbx2")
+fd=open("C:\\temp\\temp\\sysinfo.thu.greenz2a")
 
 #fd=open("C:\\temp\\temp\\sysinfo.mon.mashiez2a")
 
@@ -400,9 +400,9 @@ def dt_to_epoch(dttime):
     #return str(tstamp).split('.')[0]
     return tstamp
 
-fr=datetime.datetime(2017,8,30,9,00,0)
+fr=datetime.datetime(2017,10,19,17,40,0)
 #frstr=datetime.datetime.fromtimestamp(fr).strftime('%c')
-upto=datetime.datetime(2017,8,30,10,10,0)
+upto=datetime.datetime(2017,10,19,17,50,0)
 #uptostr=datetime.datetime.fromtimestamp(upto).strftime('%c')
 
 
@@ -410,7 +410,7 @@ find_iostat(fd)
 #find_vmstat(fd)
 #find_cpustat(fd)
 #find_nicstat(fd)
-find_prstat(fd)
+#find_prstat(fd)
 fd.close()
 def usage():
     print os.path.basename(sys.argv[0]) +  " -h for help "
